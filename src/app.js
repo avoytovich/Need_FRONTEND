@@ -15,7 +15,7 @@ const App = props => {
   //console.log('store', store);
   return (
     <Context.Provider value={{ dispatch, store }}>
-      {RouterProvider}
+      <RouterProvider userId={store.userId} />
     </Context.Provider>
   );
 };
