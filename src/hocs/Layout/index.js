@@ -9,7 +9,7 @@ const withLayout = (Component) => {
   return props => {
     return (
       <React.Fragment>
-        <Header />
+        <Header ofComponent={Component.name}/>
         <div className="container-layout">
           <Component {...props} />
         </div>

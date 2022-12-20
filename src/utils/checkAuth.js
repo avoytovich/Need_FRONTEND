@@ -6,7 +6,7 @@ const checkAuth = (userId) => {
     const decoded = jwt(token);
     if ((Date.now() / 1000) < decoded.exp) {
       return decoded.id === userId;
-    }
+    } //else {refresh token}
   }
   return false;
 };
