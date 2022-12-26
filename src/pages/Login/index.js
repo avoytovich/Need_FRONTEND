@@ -1,12 +1,20 @@
 import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
-import { Grid, Typography, TextField, Button } from '@mui/material';
+import { 
+  Grid,
+  TextField,
+  Button,
+  Stack,
+} from '@mui/material';
 
 import connect from './../../utils/connectFunction';
 import action from './../../utils/actions';
 import { withLayout } from './../../hocs'
 import { API } from '../../helper/constants';
 import { wrapRequest } from '../../utils/api';
+import CustomizeIcon from './../../utils/customizeIcon';
+
+import paddington from './../../assets/images/paddington.svg';
 
 import './login.sass';
 
@@ -76,38 +84,57 @@ const Login = props => {
         justify="center"
         className="container-landing-login"
       >
-        <Grid item xs={4} sm={4}>
-          <div className="landing-login">
-            <form onSubmit={handleSubmit}>
-              {inputFields.map((each, id) => (
-                <TextField
-                  key={id}
-                  id={each.label}
-                  name={each.label}
-                  label={each.label.toUpperCase()}
-                  placeholder={each.placeholder}
-                  inputProps={{
-                    type: each.type,
-                  }}
-                  onChange={e => handleChange(e.target.value, each.label)}
-                  style={{
-                    marginBottom: '5px',
-                  }}
-                  fullWidth
-                />
-              ))}
-              <Button type="submit" variant="contained" color="primary">
-                Log In / Sign Up
-              </Button>
-            </form>
-          </div>
-        </Grid>
-        <Grid item xs={4} sm={4}>
-          <div className="landing-about">
+        <Grid item xs={6} sm={6} >
+          {/* <div className="landing-about">
             <Typography className="landing-about-content">
               Application allows you to make request for offers. Don't spend
               time on searching! Wait on proposals and choose the best one.
             </Typography>
+          </div> */}
+          <CustomizeIcon 
+            className='login-image'
+            source={paddington}
+          />
+        </Grid>
+        <Grid item xs={6} sm={6}>
+          <div className="landing-login">
+            <form onSubmit={handleSubmit}>
+              <Stack
+                direction="column"
+                spacing={1}
+                sx={{
+                  width: 250,
+                  borderRadius: 1,
+                  padding: 1
+                }}
+              >
+                {inputFields.map((each, id) => (
+                  <TextField
+                    key={id}
+                    id={each.label}
+                    name={each.label}
+                    label={each.label.toUpperCase()}
+                    placeholder={each.placeholder}
+                    inputProps={{
+                      type: each.type,
+                      style: {
+                        color: '#1876d2'
+                      }
+                    }}
+                    onChange={e => handleChange(e.target.value, each.label)}
+                    style={{
+                      marginBottom: '5px',
+                      borderRadius: '5px',
+                      backgroundColor: '#ffffff',
+                    }}
+                    fullWidth
+                  />
+                ))}
+                <Button type="submit" variant="contained" color="primary">
+                  Log In / Sign Up
+                </Button>
+              </Stack>
+            </form>
           </div>
         </Grid>
       </Grid>

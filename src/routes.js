@@ -5,7 +5,6 @@ import {
   // Dashboard,
   ErrorPage,
   Login,
-  Landing,
   Test
 } from './pages';
 import checkAuth from './utils/checkAuth';
@@ -39,12 +38,8 @@ const AuthProvider = ({ children, userId }) => {
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Landing/>,
+    element: <Login/>,
     errorElement: <ErrorPage />
-  },
-  {
-    path: "login",
-    element: <Login />,
   },
   {
     path: "test",

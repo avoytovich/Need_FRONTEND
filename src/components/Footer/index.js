@@ -11,10 +11,10 @@ const Footer = props => {
   // console.log('props Footer', props);
   return (
     <div className="wrapper-footer">
-      <Grid container spacing={0} justify="center">
+      <Grid container spacing={0} justifyContent="center">
         <Grid item xs={10} sm={10}>
           <Typography className='content'>
-            Copyright © 2021 | Created by Andrii Voitovych
+            Copyright © 2022 | Created by Andrii Voitovych
           </Typography>
         </Grid>
       </Grid>
