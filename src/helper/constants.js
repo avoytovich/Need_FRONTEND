@@ -1,13 +1,8 @@
-const T = {
-  AUTH: 'AUTH',
-};
+const PER_PAGE = 9;
 
 const API = {
   URL: 'http://localhost',
-  PORT: 8033
+  PORT: 8033,
 };
 
-export {
-  T,
-  API
-};
+export { API, PER_PAGE };
