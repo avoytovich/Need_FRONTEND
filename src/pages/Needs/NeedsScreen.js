@@ -29,11 +29,22 @@ const NeedsScreen = (props) => {
   }, [actual, noActual, inProgress]);
 
   useEffect(() => {
+    let url = `${API.URL}:${API.PORT}/needs?page=${
+      page - 1
+    }&size=${PER_PAGE}&title=${search}`;
+
+    if (actual) {
+      url += `&filter=actual`;
+    }
+    if (noActual) {
+      url += `&filter=not actual`;
+    }
+    if (inProgress) {
+      url += `&filter=in progress`;
+    }
     wrapRequest({
       method: 'GET',
-      url: `${API.URL}:${API.PORT}/needs?page=${
-        page - 1
-      }&size=${PER_PAGE}&title=${search}`,
+      url,
       mode: 'cors',
       cache: 'default',
     })
@@ -43,7 +54,7 @@ const NeedsScreen = (props) => {
         setTotalPages(totalPages);
       })
       .catch(console.error);
-  }, [page, search]);
+  }, [page, search, actual, noActual, inProgress]);
 
   return (
     <NeedsView
