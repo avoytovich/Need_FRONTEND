@@ -14,8 +14,10 @@ const NeedsScreen = (props) => {
   const [noActual, setNoActual] = useState(false);
   const [inProgress, setInProgress] = useState(false);
   const [search, setSearch] = useState('');
+  const [selected, setSelected] = useState('');
   const [page, setPage] = useState(1);
   const [data, setData] = useState([]);
+  const [options, setOptions] = useState([]);
   const [totalItems, setTotalItems] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
 
@@ -27,6 +29,20 @@ const NeedsScreen = (props) => {
     );
     setFilterCount(filterArray.length);
   }, [actual, noActual, inProgress]);
+
+  useEffect(() => {
+    let url = `${API.URL}:${API.PORT}/needs-all`;
+    wrapRequest({
+      method: 'GET',
+      url,
+      mode: 'cors',
+      cache: 'default',
+    })
+      .then(({ data: { needs } }) => {
+        setOptions(needs);
+      })
+      .catch(console.error);
+  }, []);
 
   useEffect(() => {
     let url = `${API.URL}:${API.PORT}/needs?page=${
@@ -70,11 +86,14 @@ const NeedsScreen = (props) => {
       setInProgress={setInProgress}
       search={search}
       setSearch={setSearch}
+      selected={selected}
+      setSelected={setSelected}
       page={page}
       count={totalPages}
       totalItems={totalItems}
       handleChange={handleChange}
       data={data}
+      options={options}
     />
   );
 };
