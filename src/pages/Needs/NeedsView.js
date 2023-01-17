@@ -33,22 +33,15 @@ const NeedsView = ({
   setInProgress,
   search,
   setSearch,
+  selected,
+  setSelected,
   page,
   count,
   totalItems,
   handleChange,
   data,
+  options,
 }) => {
-  const top100Films = [
-    { title: 'The Shawshank Redemption', year: 1994 },
-    { title: 'The Godfather', year: 1972 },
-    { title: 'The Godfather: Part II', year: 1974 },
-    { title: 'The Dark Knight', year: 2008 },
-    { title: '12 Angry Men', year: 1957 },
-    { title: "Schindler's List", year: 1993 },
-    { title: 'Pulp Fiction', year: 1994 },
-  ];
-
   const searchEndAdornment = (
     <>
       <Box ml={1}>
@@ -152,7 +145,14 @@ const NeedsView = ({
               PaperComponent={({ children }) => (
                 <Paper style={{ marginBottom: 10 }}>{children}</Paper>
               )}
-              options={top100Films.map((option) => option.title)}
+              options={options.map((option) => ({
+                id: option.id,
+                label: option.title,
+              }))}
+              value={search}
+              onChange={(e, newValue) => {
+                setSearch(newValue.label || newValue);
+              }}
               renderInput={(params) => (
                 <TextField
                   {...params}
@@ -161,9 +161,12 @@ const NeedsView = ({
                   style={{
                     backgroundColor: colors['white'],
                   }}
-                  value={search}
+                  value={selected}
                   onChange={(e) => {
-                    setSearch(e.target.value);
+                    setSelected(e.target.value);
+                    if (e.target.value === '') {
+                      setSearch('');
+                    }
                   }}
                   InputProps={{
                     ...params.InputProps,
