@@ -6,6 +6,7 @@ import { withLayout } from './../../hocs';
 import { API, PER_PAGE } from '../../helper/constants';
 import { wrapRequest } from '../../utils/api';
 import NeedsView from './NeedsView';
+import { Loader } from '../../components';
 
 const NeedsScreen = (props) => {
   const [showFilters, setShowFilters] = useState(null);
@@ -20,6 +21,7 @@ const NeedsScreen = (props) => {
   const [options, setOptions] = useState([]);
   const [totalItems, setTotalItems] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   const handleChange = (e, p) => setPage(p);
 
@@ -68,9 +70,14 @@ const NeedsScreen = (props) => {
         setData(needs);
         setTotalItems(totalItems);
         setTotalPages(totalPages);
+        setLoading(false);
       })
       .catch(console.error);
   }, [page, search, actual, noActual, inProgress]);
+
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <NeedsView

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Grid,
   Typography,
@@ -42,6 +43,7 @@ const NeedsView = ({
   data,
   options,
 }) => {
+  const navigate = useNavigate();
   const searchEndAdornment = (
     <>
       <Box ml={1}>
@@ -199,6 +201,10 @@ const NeedsView = ({
                   justifyContent: 'center',
                   margin: '10px',
                   border: 1,
+                }}
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigate(`/needs/${id}`);
                 }}
               >
                 <Box
