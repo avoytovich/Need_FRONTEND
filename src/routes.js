@@ -11,6 +11,7 @@ import {
   ErrorPage,
   Login,
   Needs,
+  NeedDetails,
   Test,
 } from './pages';
 import checkAuth from './utils/checkAuth';
@@ -48,6 +49,14 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <Needs />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/needs/:id',
+    element: (
+      <ProtectedRoute>
+        <NeedDetails />
       </ProtectedRoute>
     ),
   },

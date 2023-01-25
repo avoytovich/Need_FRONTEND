@@ -22,6 +22,11 @@ export const theme = createTheme({
       fontFamily: 'sans-serif',
       fontWeight: 500,
     },
+    font_14_roboto: {
+      fontSize: 14,
+      fontFamily: 'Roboto',
+      fontWeight: 500,
+    },
     font_12_roboto: {
       fontSize: 12,
       fontFamily: 'Roboto',
