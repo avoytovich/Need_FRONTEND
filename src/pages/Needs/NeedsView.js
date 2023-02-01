@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Grid,
   Typography,
   Button,
+  Modal,
   Box,
   Stack,
   Paper,
@@ -17,6 +18,7 @@ import {
 import { FilterList as FilterListIcon } from '@mui/icons-material';
 
 import { TableFilters } from '../../components';
+import NeedAdd from './NeedAdd';
 
 import './needs.sass';
 import colors from './../../helper/colors.sass';
@@ -43,7 +45,13 @@ const NeedsView = ({
   data,
   options,
 }) => {
+  const [open, setOpen] = useState(false);
+
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
   const navigate = useNavigate();
+
   const searchEndAdornment = (
     <>
       <Box ml={1}>
@@ -185,9 +193,23 @@ const NeedsView = ({
         </Grid>
         <Grid item xs={2} sm={2} display="flex" justifyContent="flex-end">
           <Box m={2}>
-            <Button color="green_light" variant="contained">
+            <Button
+              color="green_light"
+              variant="contained"
+              onClick={handleOpen}
+            >
               Create
             </Button>
+            <Modal
+              open={open}
+              onClose={handleClose}
+              aria-labelledby="modal-modal-title"
+              aria-describedby="modal-modal-description"
+            >
+              <Box>
+                <NeedAdd />
+              </Box>
+            </Modal>
           </Box>
         </Grid>
         <Grid item xs={1} sm={1} />

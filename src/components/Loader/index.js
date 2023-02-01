@@ -7,7 +7,7 @@ import './loader.scss';
 const Loader = (props) => {
   return (
     <div className="wrapper-loader">
-      <Grid container spacing={0} className="container-needs">
+      <Grid container spacing={0} className="container-loader">
         <Grid item xs={8} sm={8} display="flex" justifyContent="center">
           <div className="loadingio-spinner-pulse-9ju1rpd5g0n">
             <div className="ldio-ksany99v4cs">
