@@ -39,6 +39,7 @@ const NeedsView = ({
   selected,
   setSelected,
   page,
+  setPage,
   count,
   totalItems,
   handleChange,
@@ -207,7 +208,11 @@ const NeedsView = ({
               aria-describedby="modal-modal-description"
             >
               <Box>
-                <NeedAdd />
+                <NeedAdd
+                  handleClose={handleClose}
+                  setPage={setPage}
+                  totalItems={totalItems}
+                />
               </Box>
             </Modal>
           </Box>
