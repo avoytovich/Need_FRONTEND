@@ -96,6 +96,7 @@ const NeedsScreen = (props) => {
       selected={selected}
       setSelected={setSelected}
       page={page}
+      setPage={setPage}
       count={totalPages}
       totalItems={totalItems}
       handleChange={handleChange}
