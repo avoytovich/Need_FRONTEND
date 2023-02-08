@@ -54,7 +54,7 @@ const NeedAddView = ({
   };
 
   return (
-    <Box className="modal-create-need">
+    <Box className="modal-create">
       <Typography textAlign="left">CREATING NEED</Typography>
       <Divider className="divider-create-need" />
       <form onSubmit={handleSubmit}>
