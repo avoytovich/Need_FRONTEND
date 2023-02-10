@@ -1,7 +1,7 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-
 import { Typography, Box, TextField, Divider, Button } from '@mui/material';
+import { toast } from 'react-toastify';
 
 import { wrapRequest } from './../../../../../utils/api';
 import { API } from './../../../../../helper/constants';
@@ -24,10 +24,16 @@ const OfferAddView = ({ handleClose, description, setDescription }) => {
       data: payload,
     })
       .then(({ data: { message } }) => {
-        console.log('message', message);
         handleClose();
+        toast.success(message, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
       })
-      .catch(console.error);
+      .catch((err) =>
+        toast.error(err, {
+          position: toast.POSITION.TOP_RIGHT,
+        }),
+      );
   };
 
   return (

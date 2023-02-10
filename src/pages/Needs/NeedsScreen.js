@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 
 import connect from './../../utils/connectFunction';
 // import action from './../../utils/actions';
@@ -43,7 +44,11 @@ const NeedsScreen = (props) => {
       .then(({ data: { needs } }) => {
         setOptions(needs);
       })
-      .catch(console.error);
+      .catch((err) =>
+        toast.error(err, {
+          position: toast.POSITION.TOP_RIGHT,
+        }),
+      );
   }, []);
 
   useEffect(() => {
@@ -72,7 +77,11 @@ const NeedsScreen = (props) => {
         setTotalPages(totalPages);
         setLoading(false);
       })
-      .catch(console.error);
+      .catch((err) =>
+        toast.error(err, {
+          position: toast.POSITION.TOP_RIGHT,
+        }),
+      );
   }, [page, search, actual, noActual, inProgress]);
 
   if (loading) {

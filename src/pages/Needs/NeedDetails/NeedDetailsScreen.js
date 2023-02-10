@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 import connect from './../../../utils/connectFunction';
 import { wrapRequest } from './../../../utils/api';
@@ -26,7 +27,11 @@ const NeedDetailsScreen = ({ store: { userId } }) => {
         setData(need);
         setLoading(false);
       })
-      .catch(console.error);
+      .catch((err) =>
+        toast.error(err, {
+          position: toast.POSITION.TOP_RIGHT,
+        }),
+      );
   }, [id]);
 
   if (loading) {
