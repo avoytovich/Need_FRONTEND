@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 import { wrapRequest } from './../../../../utils/api';
 import { API } from './../../../../helper/constants';
@@ -20,11 +21,15 @@ const OffersScreen = ({ isOwnerNeed }) => {
       mode: 'cors',
       cache: 'default',
     })
-      .then(({data}) => {
+      .then(({ data }) => {
         setData(data);
         setLoading(false);
       })
-      .catch(console.error);
+      .catch((err) =>
+        toast.error(err, {
+          position: toast.POSITION.TOP_RIGHT,
+        }),
+      );
   }, [id]);
 
   if (loading) {

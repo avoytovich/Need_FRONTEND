@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 export const getAuthHeaders = () => ({
   'x-access-token': JSON.parse(localStorage.getItem('token')),
@@ -15,4 +16,8 @@ export const wrapRequest = (options) =>
     headers: getDefHeaders(),
     ...options,
     url: options.url,
-  }).catch((error) => console.error(error));
+  }).catch((err) =>
+    toast.error(err, {
+      position: toast.POSITION.TOP_RIGHT,
+    }),
+  );

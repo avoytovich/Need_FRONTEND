@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Grid, TextField, Button, Stack } from '@mui/material';
+import { toast } from 'react-toastify';
 
 import connect from './../../utils/connectFunction';
 import action from './../../utils/actions';
@@ -71,8 +72,13 @@ const Login = (props) => {
       props.dispatchSaveUserId('saveUserId', userId);
       localStorage.setItem('token', JSON.stringify(token));
       navigate('/user/dashboard');
+      toast.success('Nice to meet NICKNAME', {
+        position: toast.POSITION.TOP_RIGHT,
+      });
     } else {
-      console.log('Something went wrong...with login');
+      toast.warning('Something went wrong...with login', {
+        position: toast.POSITION.TOP_RIGHT,
+      });
     }
   };
 

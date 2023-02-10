@@ -1,6 +1,6 @@
 import React from 'react';
-
 import { Typography, Box, TextField, Divider, Button } from '@mui/material';
+import { toast } from 'react-toastify';
 
 import { wrapRequest } from './../../../utils/api';
 import { API, PER_PAGE } from './../../../helper/constants';
@@ -42,15 +42,22 @@ const NeedAddView = ({
       cache: 'default',
       data: payload,
     })
-      .then(() => {
+      .then(({ data: { message } }) => {
         handleClose();
         setPage(
           Number.isInteger(totalItems / PER_PAGE)
             ? totalItems / PER_PAGE + 1
             : Math.ceil(totalItems / PER_PAGE),
         );
+        toast.success(message, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
       })
-      .catch(console.error);
+      .catch((err) =>
+        toast.error(err, {
+          position: toast.POSITION.TOP_RIGHT,
+        }),
+      );
   };
 
   return (
