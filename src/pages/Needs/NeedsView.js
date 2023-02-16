@@ -17,11 +17,12 @@ import {
 } from '@mui/material';
 import { FilterList as FilterListIcon } from '@mui/icons-material';
 
-import { TableFilters } from '../../components';
+import { TableFilters } from 'components';
 import NeedAdd from './NeedAdd';
+import { text } from 'helper/constants';
 
+import colors from 'helper/colors.sass';
 import './needs.sass';
-import colors from './../../helper/colors.sass';
 
 const NeedsView = ({
   showFilters,
@@ -52,6 +53,12 @@ const NeedsView = ({
   const handleClose = () => setOpen(false);
 
   const navigate = useNavigate();
+
+  const {
+    pages: {
+      needs: { NEEDS, CREATE, ABILITY_TO_PAY, GRN, SEARCH_NEED },
+    },
+  } = text;
 
   const searchEndAdornment = (
     <>
@@ -131,7 +138,9 @@ const NeedsView = ({
         <Grid item xs={1} sm={1} />
         <Grid item xs={2} sm={2}>
           <Box m={2}>
-            <Typography variant="font_24_serif">{totalItems} Needs</Typography>
+            <Typography variant="font_24_serif">
+              {`${totalItems} ${NEEDS}`}
+            </Typography>
           </Box>
         </Grid>
         <Grid item xs={6} sm={6} display="flex" justifyContent="center">
@@ -167,7 +176,7 @@ const NeedsView = ({
               renderInput={(params) => (
                 <TextField
                   {...params}
-                  label="Search NEED"
+                  label={SEARCH_NEED}
                   variant="outlined"
                   style={{
                     backgroundColor: colors['white'],
@@ -199,7 +208,7 @@ const NeedsView = ({
               variant="contained"
               onClick={handleOpen}
             >
-              Create
+              {CREATE}
             </Button>
             <Modal
               open={open}
@@ -268,7 +277,7 @@ const NeedsView = ({
                   }}
                 >
                   <Typography variant="font_12_roboto">
-                    {`ability to pay: ${ability_to_pay} grn`}
+                    {`${ABILITY_TO_PAY} ${ability_to_pay} ${GRN}`}
                   </Typography>
                 </Box>
               </Box>

@@ -3,13 +3,19 @@ import { useParams } from 'react-router-dom';
 import { Typography, Box, TextField, Divider, Button } from '@mui/material';
 import { toast } from 'react-toastify';
 
-import { wrapRequest } from './../../../../../utils/api';
-import { API } from './../../../../../helper/constants';
+import { wrapRequest } from 'utils/api';
+import { API, text } from 'helper/constants';
 
 import './offer_add.sass';
 
 const OfferAddView = ({ handleClose, description, setDescription }) => {
   const { id } = useParams();
+
+  const {
+    pages: {
+      offerAdd: { CREATING_OFFER, DESCRIPTION, SAVE, CANCEL },
+    },
+  } = text;
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -38,7 +44,7 @@ const OfferAddView = ({ handleClose, description, setDescription }) => {
 
   return (
     <Box className="modal-create">
-      <Typography textAlign="left">CREATING OFFER</Typography>
+      <Typography textAlign="left">{CREATING_OFFER}</Typography>
       <Divider className="divider-create-offer" />
       <form onSubmit={handleSubmit}>
         <Box
@@ -48,7 +54,7 @@ const OfferAddView = ({ handleClose, description, setDescription }) => {
         >
           <TextField
             id="outlined-multiline-static"
-            label="Description"
+            label={DESCRIPTION}
             fullWidth
             multiline
             rows={3}
@@ -68,7 +74,7 @@ const OfferAddView = ({ handleClose, description, setDescription }) => {
                 e.stopPropagation();
               }}
             >
-              SAVE
+              {SAVE}
             </Button>
           </Box>
           <Box m={2}>
@@ -81,7 +87,7 @@ const OfferAddView = ({ handleClose, description, setDescription }) => {
                 e.stopPropagation();
               }}
             >
-              CANCEL
+              {CANCEL}
             </Button>
           </Box>
         </Box>

@@ -1,6 +1,6 @@
 import { createTheme } from '@mui/material/styles';
 
-import colors from './../helper/colors.sass';
+import colors from 'helper/colors.sass';
 
 const { palette } = createTheme();
 const { augmentColor } = palette;

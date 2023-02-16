@@ -3,17 +3,17 @@ import { useNavigate } from 'react-router-dom';
 import { Grid, TextField, Button, Stack } from '@mui/material';
 import { toast } from 'react-toastify';
 
-import connect from './../../utils/connectFunction';
-import action from './../../utils/actions';
-import { withLayout } from './../../hocs';
-import { API } from '../../helper/constants';
-import { wrapRequest } from '../../utils/api';
-import CustomizeIcon from './../../utils/customizeIcon';
+import connect from 'utils/connectFunction';
+import action from 'utils/actions';
+import { withLayout } from 'hocs';
+import { API, text } from 'helper/constants';
+import { wrapRequest } from 'utils/api';
+import CustomizeIcon from 'utils/customizeIcon';
 
-import paddington from './../../assets/images/paddington.svg';
+import paddington from 'assets/images/paddington.svg';
 
+import colors from 'helper/colors.sass';
 import './login.sass';
-import colors from './../../helper/colors.sass';
 
 const Login = (props) => {
   // console.log('props Login', props);
@@ -22,6 +22,12 @@ const Login = (props) => {
   const [password, setPassword] = useState();
 
   const navigate = useNavigate();
+
+  const {
+    pages: {
+      login: { LOG_IN_SIGN_UP },
+    },
+  } = text;
 
   const inputFields = [
     {
@@ -128,7 +134,7 @@ const Login = (props) => {
                   />
                 ))}
                 <Button type="submit" variant="contained" color="primary">
-                  Log In / Sign Up
+                  {LOG_IN_SIGN_UP}
                 </Button>
               </Stack>
             </form>

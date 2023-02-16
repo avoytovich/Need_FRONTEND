@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
-import connect from './../../utils/connectFunction';
-// import action from './../../utils/actions';
-import { withLayout } from './../../hocs';
-import { API, PER_PAGE } from '../../helper/constants';
-import { wrapRequest } from '../../utils/api';
+import connect from 'utils/connectFunction';
+// import action from 'utils/actions';
+import { withLayout } from 'hocs';
+import { API, PER_PAGE } from 'helper/constants';
+import { wrapRequest } from 'utils/api';
 import NeedsView from './NeedsView';
-import { Loader } from '../../components';
+import { Loader } from 'components';
 
 const NeedsScreen = (props) => {
   const [showFilters, setShowFilters] = useState(null);

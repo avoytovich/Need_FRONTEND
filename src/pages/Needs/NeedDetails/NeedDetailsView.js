@@ -2,13 +2,20 @@ import React from 'react';
 import { Grid, Typography, Button, Box, Stack, TextField } from '@mui/material';
 
 import Offers from './Offers';
+import { text } from 'helper/constants';
 
-import colors from './../../../helper/colors.sass';
+import colors from 'helper/colors.sass';
 
 const NeedDetailsView = ({
   data: { owner_id, title, description, createdAt, status, ability_to_pay },
   currentUserId,
 }) => {
+  const {
+    pages: {
+      needsDetails: { STATUS, ABILITY_TO_PAY, DESCRIPTION, SAVE, CANCEL },
+    },
+  } = text;
+
   const handleDate = (date) => new Date(date).toLocaleDateString();
 
   const handleBackground = (status) => {
@@ -55,7 +62,7 @@ const NeedDetailsView = ({
               }}
             >
               <Box>
-                <Typography variant="font_14_roboto">status:</Typography>
+                <Typography variant="font_14_roboto">{STATUS}</Typography>
               </Box>
               <Box
                 sx={{
@@ -82,7 +89,7 @@ const NeedDetailsView = ({
             >
               <Box>
                 <Typography variant="font_14_roboto">
-                  ability to pay:
+                  {ABILITY_TO_PAY}
                 </Typography>
               </Box>
               <Box
@@ -109,7 +116,7 @@ const NeedDetailsView = ({
           >
             <TextField
               id="outlined-multiline-static"
-              label="Description"
+              label={DESCRIPTION}
               fullWidth
               multiline
               rows={3}
@@ -133,7 +140,7 @@ const NeedDetailsView = ({
                     e.stopPropagation();
                   }}
                 >
-                  SAVE
+                  {SAVE}
                 </Button>
               </Box>
               <Box m={1}>
@@ -146,7 +153,7 @@ const NeedDetailsView = ({
                     e.stopPropagation();
                   }}
                 >
-                  CANCEL
+                  {CANCEL}
                 </Button>
               </Box>
             </Box>
