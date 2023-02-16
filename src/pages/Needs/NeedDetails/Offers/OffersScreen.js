@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-import { wrapRequest } from './../../../../utils/api';
-import { API } from './../../../../helper/constants';
-import { Loader } from './../../../../components';
+import { wrapRequest } from 'utils/api';
+import { API } from 'helper/constants';
+import { Loader } from 'components';
 import OffersView from './OffersView.js';
 
 const OffersScreen = ({ isOwnerNeed }) => {

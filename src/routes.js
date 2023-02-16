@@ -13,8 +13,8 @@ import {
   Needs,
   NeedDetails,
   Test,
-} from './pages';
-import checkAuth from './utils/checkAuth';
+} from 'pages';
+import checkAuth from 'utils/checkAuth';
 
 const AuthContext = React.createContext(null);
 

@@ -1,7 +1,9 @@
 import React from 'react';
 import { Button, Box, Stack } from '@mui/material';
 
-import colors from './../../helper/colors.sass';
+import { text } from 'helper/constants';
+
+import colors from 'helper/colors.sass';
 
 const TableFilters = ({
   onClose,
@@ -12,6 +14,12 @@ const TableFilters = ({
   inProgress,
   setInProgress,
 }) => {
+  const {
+    components: {
+      tableFilters: { ACTUAL, NOT_ACTUAL, IN_PROGRESS },
+    },
+  } = text;
+
   return (
     <Stack
       sx={{
@@ -38,7 +46,7 @@ const TableFilters = ({
             setActual((s) => !s);
           }}
         >
-          ACTUAL
+          {ACTUAL}
         </Button>
       </Box>
       <Box m={1}>
@@ -55,7 +63,7 @@ const TableFilters = ({
             setNoActual((s) => !s);
           }}
         >
-          NOT ACTUAL
+          {NOT_ACTUAL}
         </Button>
       </Box>
       <Box m={1}>
@@ -72,7 +80,7 @@ const TableFilters = ({
             setInProgress((s) => !s);
           }}
         >
-          IN PROGRESS
+          {IN_PROGRESS}
         </Button>
       </Box>
     </Stack>

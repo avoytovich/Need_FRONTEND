@@ -2,10 +2,10 @@ import React from 'react';
 import { Typography, Box, TextField, Divider, Button } from '@mui/material';
 import { toast } from 'react-toastify';
 
-import { wrapRequest } from './../../../utils/api';
-import { API, PER_PAGE } from './../../../helper/constants';
+import { wrapRequest } from 'utils/api';
+import { API, PER_PAGE, text } from 'helper/constants';
 
-import colors from './../../../helper/colors.sass';
+import colors from 'helper/colors.sass';
 
 import './need_add.sass';
 
@@ -20,6 +20,20 @@ const NeedAddView = ({
   description,
   setDescription,
 }) => {
+  const {
+    pages: {
+      needAdd: {
+        CREATING_NEED,
+        TITLE,
+        PAY_FOR,
+        PROPOSE_TO_PAY_MESSAGE,
+        DESCRIPTION,
+        SAVE,
+        CANCEL,
+      },
+    },
+  } = text;
+
   const handleTitle = (value) => {
     setTitle(value);
   };
@@ -62,11 +76,11 @@ const NeedAddView = ({
 
   return (
     <Box className="modal-create">
-      <Typography textAlign="left">CREATING NEED</Typography>
+      <Typography textAlign="left">{CREATING_NEED}</Typography>
       <Divider className="divider-create-need" />
       <form onSubmit={handleSubmit}>
         <Box display="flex" justifyContent="space-between" alignItems="center">
-          <Typography>title:</Typography>
+          <Typography>{TITLE}</Typography>
           <TextField
             placeholder="type title"
             size="small"
@@ -87,9 +101,9 @@ const NeedAddView = ({
           />
         </Box>
         <Box display="flex" justifyContent="space-between" alignItems="center">
-          <Typography>pay for:</Typography>
+          <Typography>{PAY_FOR}</Typography>
           <TextField
-            placeholder="type how much are you ready to pay for?"
+            placeholder={PROPOSE_TO_PAY_MESSAGE}
             size="small"
             inputProps={{
               type: 'number',
@@ -114,7 +128,7 @@ const NeedAddView = ({
         >
           <TextField
             id="outlined-multiline-static"
-            label="Description"
+            label={DESCRIPTION}
             fullWidth
             multiline
             rows={3}
@@ -134,7 +148,7 @@ const NeedAddView = ({
                 e.stopPropagation();
               }}
             >
-              SAVE
+              {SAVE}
             </Button>
           </Box>
           <Box m={2}>
@@ -147,7 +161,7 @@ const NeedAddView = ({
                 e.stopPropagation();
               }}
             >
-              CANCEL
+              {CANCEL}
             </Button>
           </Box>
         </Box>

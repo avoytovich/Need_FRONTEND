@@ -1,24 +1,31 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Grid, Typography, IconButton, Stack, Divider } from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
 import { Link, useNavigate } from 'react-router-dom';
 
-import connect from './../../utils/connectFunction';
-import action from './../../utils/actions';
-import checkAuth from './../../utils/checkAuth';
-import CustomizeIcon from './../../utils/customizeIcon';
+import connect from 'utils/connectFunction';
+import action from 'utils/actions';
+import checkAuth from 'utils/checkAuth';
+import CustomizeIcon from 'utils/customizeIcon';
+import { text } from 'helper/constants';
 import { links } from './constants';
 
-import imageLogo from './../../assets/images/logo.svg';
-import imageAvatar from './../../assets/images/avatar.svg';
+import imageLogo from 'assets/images/logo.svg';
+import imageAvatar from 'assets/images/avatar.svg';
 
+import colors from 'helper/colors.sass';
 import './header.sass';
-import colors from './../../helper/colors.sass';
 
 const Header = (props) => {
   // console.log('Header props', props);
 
   const navigate = useNavigate();
+
+  const {
+    components: {
+      header: { BACK, LOG_OUT },
+    },
+  } = text;
 
   const handleLogOut = () => {
     localStorage.setItem('token', JSON.stringify(null));
@@ -27,9 +34,8 @@ const Header = (props) => {
 
   const isAuth = checkAuth(props.store.userId);
 
-  const property = isAuth ? 'withAuth' : 'withoutAuth';
-
   const resolveOnClickLink = (title) => {
+    props.dispatchActiveLink('saveActiveLink', title);
     switch (title) {
       case 'Log Out':
         handleLogOut();
@@ -53,37 +59,49 @@ const Header = (props) => {
               />
             </Grid>
             <Grid item xs={8} sm={8} className="container-go-back">
-              <IconButton onClick={() => navigate(-1)}>
-                <ArrowBack style={{ color: colors['red-light'] }} />
-              </IconButton>
-              <Typography className="info-title">BACK</Typography>
+              {isAuth && (
+                <Fragment>
+                  <IconButton onClick={() => navigate(-1)}>
+                    <ArrowBack style={{ color: colors['red-light'] }} />
+                  </IconButton>
+                  <Typography className="info-title">{BACK}</Typography>
+                </Fragment>
+              )}
             </Grid>
           </Grid>
           <Grid item xs={8} sm={8} className="container-link">
-            <Stack
-              direction="row"
-              divider={
-                <Divider
-                  orientation="vertical"
-                  flexItem
-                  className="divider-link"
-                />
-              }
-              spacing={1}
-            >
-              {links[property].map((item) => {
-                return (
-                  <Link
-                    key={item.id}
-                    to={item.route}
-                    className="link"
-                    onClick={() => resolveOnClickLink(item.title)}
-                  >
-                    <Typography className="link-title">{item.title}</Typography>
-                  </Link>
-                );
-              })}
-            </Stack>
+            {isAuth && (
+              <Stack
+                direction="row"
+                divider={
+                  <Divider
+                    orientation="vertical"
+                    flexItem
+                    className="divider-link"
+                  />
+                }
+                spacing={1}
+              >
+                {links.map((item) => {
+                  return (
+                    <Link
+                      key={item.id}
+                      to={item.route}
+                      className="link"
+                      onClick={() => resolveOnClickLink(item.title)}
+                    >
+                      <Typography
+                        className={`link-title ${
+                          props.store.activeLink === item.title && 'active'
+                        }`}
+                      >
+                        {item.title}
+                      </Typography>
+                    </Link>
+                  );
+                })}
+              </Stack>
+            )}
           </Grid>
           <Grid item xs={2} sm={2} className="container-link">
             {isAuth && (
@@ -99,7 +117,7 @@ const Header = (props) => {
                   className="link"
                   onClick={() => resolveOnClickLink('Log Out')}
                 >
-                  <Typography className="link-title">Log Out</Typography>
+                  <Typography className="link-title">{LOG_OUT}</Typography>
                 </Link>
               </>
             )}
@@ -118,6 +136,7 @@ const mapDispatchToProps = (dispatch) => {
   const actionData = (name, payload) => dispatch(action(name, payload));
   return {
     dispatchSaveUserId: actionData,
+    dispatchActiveLink: actionData,
   };
 };
 

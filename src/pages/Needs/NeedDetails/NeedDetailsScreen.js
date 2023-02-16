@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-import connect from './../../../utils/connectFunction';
-import { wrapRequest } from './../../../utils/api';
-import { withLayout } from './../../../hocs';
-import { API } from './../../../helper/constants';
-import { Loader } from './../../../components';
+import connect from 'utils/connectFunction';
+import { wrapRequest } from 'utils/api';
+import { withLayout } from 'hocs';
+import { API } from 'helper/constants';
+import { Loader } from 'components';
 import NeedDetailsView from './NeedDetailsView';
 
 const NeedDetailsScreen = ({ store: { userId } }) => {

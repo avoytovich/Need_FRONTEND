@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, Fragment } from 'react';
 
 import {
   Button,
@@ -8,16 +8,48 @@ import {
   TextField,
   Typography,
   Modal,
+  IconButton,
 } from '@mui/material';
 
+import { ArrowForwardIos, ArrowBackIos } from '@mui/icons-material';
+
+import { text } from 'helper/constants';
 import OfferAdd from './OfferAdd';
+
+import colors from 'helper/colors.sass';
 
 const OffersView = ({ data, isOwnerNeed }) => {
   const [value, setValue] = useState(0);
   const [open, setOpen] = useState(false);
+  const [paginOffers, setPaginOffers] = useState(0);
+  const [dataOffers, setDataOffers] = useState(data.slice(0, 5));
+
+  const {
+    pages: {
+      offers: { ACCEPT, REJECT, NO_OFFERS, ADD_OFFER, DESCRIPTION },
+    },
+  } = text;
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  const paginDataForward = () => {
+    if (data.length > 5) {
+      setDataOffers(
+        data.slice((paginOffers + 1) * 5, (paginOffers + 1) * 5 + 5),
+      );
+      setPaginOffers((s) => (s += 1));
+    }
+  };
+
+  const paginDataBack = () => {
+    if (data.length > 5) {
+      setDataOffers(
+        data.slice((paginOffers - 1) * 5, (paginOffers - 1) * 5 + 5),
+      );
+      setPaginOffers((s) => (s -= 1));
+    }
+  };
 
   const TabPanel = (props) => {
     const { children, value, index, ...other } = props;
@@ -59,7 +91,7 @@ const OffersView = ({ data, isOwnerNeed }) => {
             e.stopPropagation();
           }}
         >
-          ACCEPT
+          {ACCEPT}
         </Button>
       </Box>
       <Box m="32px 32px 0px 32px">
@@ -70,19 +102,19 @@ const OffersView = ({ data, isOwnerNeed }) => {
             e.stopPropagation();
           }}
         >
-          REJECT
+          {REJECT}
         </Button>
       </Box>
     </Box>
   ) : (
-    <Typography variant="font_14_roboto">No Offers</Typography>
+    <Typography variant="font_14_roboto">{NO_OFFERS}</Typography>
   );
 
   const flowIfIsNotOwner = (
     <Box display="flex" justifyContent="center">
       <Box m="8px 32px 8px 32px">
         <Button color="green_light" variant="contained" onClick={handleOpen}>
-          ADD OFFER
+          {ADD_OFFER}
         </Button>
         <Modal
           open={open}
@@ -101,28 +133,48 @@ const OffersView = ({ data, isOwnerNeed }) => {
   return (
     <>
       {data.length && isOwnerNeed ? (
-        <Box>
-          <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-            <Tabs
-              value={value}
-              onChange={handleChange}
-              aria-label="basic tabs example"
-            >
-              {data.map((item, ind) => (
-                <Tab
-                  key={item.id}
-                  label={`Offer ${ind + 1}`}
-                  {...a11yProps(ind + 1)}
-                />
-              ))}
-            </Tabs>
+        <Box sx={{ width: '70%' }}>
+          <Box ml={3} sx={{ display: 'flex', justifyContent: 'flex-start' }}>
+            <Box>
+              {paginOffers > 0 && (
+                <Fragment>
+                  <IconButton onClick={paginDataBack}>
+                    <ArrowBackIos style={{ color: colors['red-light'] }} />
+                  </IconButton>
+                </Fragment>
+              )}
+            </Box>
+            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+              <Tabs
+                value={value}
+                onChange={handleChange}
+                aria-label="basic tabs example"
+              >
+                {dataOffers.map((item, ind) => (
+                  <Tab
+                    key={item.id}
+                    label={`Offer ${ind + (paginOffers * 5 + 1)}`}
+                    {...a11yProps(ind + 1)}
+                  />
+                ))}
+              </Tabs>
+            </Box>
+            <Box>
+              {data.slice(paginOffers * 5).length > 5 && (
+                <Fragment>
+                  <IconButton onClick={paginDataForward}>
+                    <ArrowForwardIos style={{ color: colors['red-light'] }} />
+                  </IconButton>
+                </Fragment>
+              )}
+            </Box>
           </Box>
           <Box>
-            {data.map((item, ind) => (
+            {dataOffers.map((item, ind) => (
               <TabPanel key={item.id} value={value} index={ind}>
                 <TextField
                   id="outlined-multiline-static"
-                  label="Description"
+                  label={DESCRIPTION}
                   multiline
                   fullWidth
                   rows={3}

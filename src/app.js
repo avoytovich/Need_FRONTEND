@@ -3,10 +3,10 @@ import createPersistedReducer from 'use-persisted-reducer';
 import { ThemeProvider } from '@mui/material/styles';
 import { ToastContainer } from 'react-toastify';
 
-import { theme } from './utils/theme';
-import RouterProvider from './routes';
-import Context from './utils/context';
-import generalReducer from './utils/gereralReducer';
+import { theme } from 'utils/theme';
+import RouterProvider from 'routes';
+import Context from 'utils/context';
+import generalReducer from 'utils/gereralReducer';
 
 import 'react-toastify/dist/ReactToastify.css';
 
