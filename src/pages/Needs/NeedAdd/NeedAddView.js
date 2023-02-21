@@ -19,6 +19,8 @@ const NeedAddView = ({
   setAbilityToPay,
   description,
   setDescription,
+  errors,
+  dispatchError,
 }) => {
   const {
     pages: {
@@ -36,14 +38,39 @@ const NeedAddView = ({
 
   const handleTitle = (value) => {
     setTitle(value);
+    if (!value) {
+      dispatchError({ type: 'TITLE', payload: true });
+    } else {
+      dispatchError({ type: 'TITLE', payload: false });
+    }
   };
 
   const handleAbilityToPay = (value) => {
     setAbilityToPay(value);
+    if (!value) {
+      dispatchError({ type: 'ABILITY_TO_PAY', payload: true });
+    } else {
+      dispatchError({ type: 'ABILITY_TO_PAY', payload: false });
+    }
+  };
+
+  const handleDescription = (value) => {
+    setDescription(value);
+    if (!value) {
+      dispatchError({ type: 'DESCRIPTION', payload: true });
+    } else {
+      dispatchError({ type: 'DESCRIPTION', payload: false });
+    }
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    if (!title || !abilityToPay || !description) {
+      !title && dispatchError({ type: 'TITLE', payload: true });
+      !abilityToPay && dispatchError({ type: 'ABILITY_TO_PAY', payload: true });
+      !description && dispatchError({ type: 'DESCRIPTION', payload: true });
+      return;
+    }
     const payload = {
       title,
       ability_to_pay: abilityToPay,
@@ -79,7 +106,11 @@ const NeedAddView = ({
       <Typography textAlign="left">{CREATING_NEED}</Typography>
       <Divider className="divider-create-need" />
       <form onSubmit={handleSubmit}>
-        <Box display="flex" justifyContent="space-between" alignItems="center">
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          alignItems="baseline"
+        >
           <Typography>{TITLE}</Typography>
           <TextField
             placeholder="type title"
@@ -98,10 +129,16 @@ const NeedAddView = ({
               backgroundColor: colors['white'],
             }}
             fullWidth
+            error={errors.title}
+            helperText={errors.title && 'Please fill out this field'}
           />
         </Box>
-        <Box display="flex" justifyContent="space-between" alignItems="center">
-          <Typography>{PAY_FOR}</Typography>
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          alignItems="baseline"
+        >
+          <Typography style={{ whiteSpace: 'nowrap' }}>{PAY_FOR}</Typography>
           <TextField
             placeholder={PROPOSE_TO_PAY_MESSAGE}
             size="small"
@@ -119,6 +156,8 @@ const NeedAddView = ({
               backgroundColor: colors['white'],
             }}
             fullWidth
+            error={errors.abilityToPay}
+            helperText={errors.abilityToPay && 'Please fill out this field'}
           />
         </Box>
         <Box
@@ -132,7 +171,9 @@ const NeedAddView = ({
             fullWidth
             multiline
             rows={3}
-            onChange={(e) => setDescription(e.target.value)}
+            onChange={(e) => handleDescription(e.target.value)}
+            error={errors.description}
+            helperText={errors.description && 'Please fill out this field'}
           />
         </Box>
         <Box display="flex" justifyContent="center">
@@ -147,6 +188,9 @@ const NeedAddView = ({
               onClick={(e) => {
                 e.stopPropagation();
               }}
+              disabled={
+                errors.title || errors.abilityToPay || errors.description
+              }
             >
               {SAVE}
             </Button>

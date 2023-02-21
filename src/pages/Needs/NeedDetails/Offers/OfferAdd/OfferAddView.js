@@ -8,7 +8,13 @@ import { API, text } from 'helper/constants';
 
 import './offer_add.sass';
 
-const OfferAddView = ({ handleClose, description, setDescription }) => {
+const OfferAddView = ({
+  handleClose,
+  description,
+  setDescription,
+  errors,
+  dispatchError,
+}) => {
   const { id } = useParams();
 
   const {
@@ -17,8 +23,21 @@ const OfferAddView = ({ handleClose, description, setDescription }) => {
     },
   } = text;
 
+  const handleDescription = (value) => {
+    setDescription(value);
+    if (!value) {
+      dispatchError({ type: 'DESCRIPTION', payload: true });
+    } else {
+      dispatchError({ type: 'DESCRIPTION', payload: false });
+    }
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
+    if (!description) {
+      !description && dispatchError({ type: 'DESCRIPTION', payload: true });
+      return;
+    }
     const payload = {
       description,
     };
@@ -58,7 +77,9 @@ const OfferAddView = ({ handleClose, description, setDescription }) => {
             fullWidth
             multiline
             rows={3}
-            onChange={(e) => setDescription(e.target.value)}
+            onChange={(e) => handleDescription(e.target.value)}
+            error={errors.description}
+            helperText={errors.description && 'Please fill out this field'}
           />
         </Box>
         <Box display="flex" justifyContent="center">
@@ -73,6 +94,7 @@ const OfferAddView = ({ handleClose, description, setDescription }) => {
               onClick={(e) => {
                 e.stopPropagation();
               }}
+              disabled={errors.description}
             >
               {SAVE}
             </Button>
