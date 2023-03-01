@@ -1,8 +1,19 @@
-import React from 'react';
-import { Grid, Typography, Button, Box, Stack, TextField } from '@mui/material';
+import React, { useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import {
+  Grid,
+  Typography,
+  Button,
+  Box,
+  Stack,
+  TextField,
+  Modal,
+} from '@mui/material';
 
 import Offers from './Offers';
-import { text } from 'helper/constants';
+import { text, API } from 'helper/constants';
+import { wrapRequest } from 'utils/api';
 
 import colors from 'helper/colors.sass';
 
@@ -10,9 +21,27 @@ const NeedDetailsView = ({
   data: { owner_id, title, description, createdAt, status, ability_to_pay },
   currentUserId,
 }) => {
+  const [open, setOpen] = useState(false);
+
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  const { id } = useParams();
+  const navigate = useNavigate();
+
   const {
     pages: {
-      needsDetails: { STATUS, ABILITY_TO_PAY, DESCRIPTION, SAVE, CANCEL },
+      needsDetails: {
+        STATUS,
+        ABILITY_TO_PAY,
+        DESCRIPTION,
+        SAVE,
+        CANCEL,
+        DELETE,
+        CONFIRMATION_DELETE,
+        YES,
+        NO,
+      },
     },
   } = text;
 
@@ -29,6 +58,27 @@ const NeedDetailsView = ({
       default:
         break;
     }
+  };
+
+  const handleDelete = () => {
+    wrapRequest({
+      method: 'DELETE',
+      url: `${API.URL}:${API.PORT}/needs/${id}/delete`,
+      mode: 'cors',
+      cache: 'default',
+    })
+      .then(({ data: { message } }) => {
+        handleClose();
+        navigate(-1);
+        toast.success(message, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+      })
+      .catch((err) =>
+        toast.error(err, {
+          position: toast.POSITION.TOP_RIGHT,
+        }),
+      );
   };
 
   return (
@@ -125,13 +175,72 @@ const NeedDetailsView = ({
           </Stack>
           {owner_id === currentUserId && (
             <Box
+              mt={5}
               display="flex"
               flexDirection="column"
               justifyContent="flex-end"
             >
+              <Box ml={1} mb={1}>
+                <Button
+                  color="red_light"
+                  size="small"
+                  variant="contained"
+                  style={{
+                    width: '100px',
+                  }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleOpen();
+                  }}
+                >
+                  {DELETE}
+                </Button>
+                <Modal
+                  open={open}
+                  onClose={handleClose}
+                  aria-labelledby="modal-modal-title"
+                  aria-describedby="modal-modal-description"
+                >
+                  <Box className="modal-create">
+                    <Box textAlign="center">
+                      <Typography>{CONFIRMATION_DELETE}</Typography>
+                    </Box>
+                    <Box display="flex" justifyContent="center">
+                      <Box m={3}>
+                        <Button
+                          color="blue_light"
+                          size="small"
+                          variant="contained"
+                          style={{
+                            width: '100px',
+                          }}
+                          onClick={handleDelete}
+                        >
+                          {YES}
+                        </Button>
+                      </Box>
+                      <Box m={3}>
+                        <Button
+                          variant="outlined"
+                          size="small"
+                          style={{
+                            width: '100px',
+                          }}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                          }}
+                        >
+                          {NO}
+                        </Button>
+                      </Box>
+                    </Box>
+                  </Box>
+                </Modal>
+              </Box>
               <Box m={1}>
                 <Button
                   color="blue_light"
+                  size="small"
                   variant="contained"
                   style={{
                     width: '100px',
@@ -146,6 +255,7 @@ const NeedDetailsView = ({
               <Box m={1}>
                 <Button
                   variant="outlined"
+                  size="small"
                   style={{
                     width: '100px',
                   }}
