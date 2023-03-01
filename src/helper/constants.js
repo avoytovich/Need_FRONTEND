@@ -41,6 +41,10 @@ const text = {
       DESCRIPTION: 'Description',
       SAVE: 'SAVE',
       CANCEL: 'CANCEL',
+      DELETE: 'DELETE',
+      CONFIRMATION_DELETE: 'Do you still want to delete this NEED?',
+      YES: 'YES',
+      NO: 'NO',
     },
     needAdd: {
       CREATING_NEED: 'CREATING NEED',

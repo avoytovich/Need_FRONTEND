@@ -10,6 +10,11 @@ const actions = (name, payload) => {
         type: 'SAVE_ACTIVE_LINK',
         payload,
       };
+    case 'prevPage':
+      return {
+        type: 'PREV_PAGE',
+        payload,
+      };
     default:
       break;
   }

@@ -122,7 +122,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   // const actionData = (name, payload) => dispatch(action(name, payload));
   return {
-    // dispatchSaveUserId: actionData,
+    // dispatchPrevPage: actionData,
   };
 };
 

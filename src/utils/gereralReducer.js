@@ -10,6 +10,11 @@ const generalReducer = (state, action) => {
         ...state,
         activeLink: action.payload,
       };
+    case 'PREV_PAGE':
+      return {
+        ...state,
+        prevPage: action.payload,
+      };
     default:
       return state;
   }
