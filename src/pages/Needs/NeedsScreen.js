@@ -18,6 +18,7 @@ const NeedsScreen = (props) => {
   const [search, setSearch] = useState('');
   const [selected, setSelected] = useState('');
   const [page, setPage] = useState(1);
+  const [refresh, setRefresh] = useState(0);
   const [data, setData] = useState([]);
   const [options, setOptions] = useState([]);
   const [totalItems, setTotalItems] = useState(0);
@@ -82,7 +83,7 @@ const NeedsScreen = (props) => {
           position: toast.POSITION.TOP_RIGHT,
         }),
       );
-  }, [page, search, actual, noActual, inProgress]);
+  }, [page, search, actual, noActual, inProgress, refresh]);
 
   if (loading) {
     return <Loader />;
@@ -106,6 +107,7 @@ const NeedsScreen = (props) => {
       setSelected={setSelected}
       page={page}
       setPage={setPage}
+      setRefresh={setRefresh}
       count={totalPages}
       totalItems={totalItems}
       handleChange={handleChange}

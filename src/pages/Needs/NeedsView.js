@@ -45,6 +45,7 @@ const NeedsView = ({
   setSelected,
   page,
   setPage,
+  setRefresh,
   dispatchPrevPage,
   count,
   totalItems,
@@ -142,7 +143,7 @@ const NeedsView = ({
       setPage(store.prevPage);
       dispatchPrevPage('prevPage', null);
     }
-  });
+  }, []);
 
   return (
     <div className="wrapper-needs">
@@ -231,7 +232,9 @@ const NeedsView = ({
               <Box>
                 <NeedAdd
                   handleClose={handleClose}
+                  page={page}
                   setPage={setPage}
+                  setRefresh={setRefresh}
                   totalItems={totalItems}
                 />
               </Box>

@@ -107,6 +107,7 @@ const OfferAddView = ({
               }}
               onClick={(e) => {
                 e.stopPropagation();
+                handleClose();
               }}
             >
               {CANCEL}

@@ -67,10 +67,10 @@ const NeedDetailsView = ({
       mode: 'cors',
       cache: 'default',
     })
-      .then(({ data: { message } }) => {
+      .then(() => {
         handleClose();
         navigate(-1);
-        toast.success(message, {
+        toast.success(`Need - ${title} was successfully deleted`, {
           position: toast.POSITION.TOP_RIGHT,
         });
       })
