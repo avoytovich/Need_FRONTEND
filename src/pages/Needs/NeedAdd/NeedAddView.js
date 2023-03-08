@@ -11,7 +11,9 @@ import './need_add.sass';
 
 const NeedAddView = ({
   handleClose,
+  page,
   setPage,
+  setRefresh,
   totalItems,
   title,
   setTitle,
@@ -65,17 +67,24 @@ const NeedAddView = ({
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    const resPage = Number.isInteger(totalItems / PER_PAGE)
+      ? totalItems / PER_PAGE + 1
+      : Math.ceil(totalItems / PER_PAGE);
+
     if (!title || !abilityToPay || !description) {
       !title && dispatchError({ type: 'TITLE', payload: true });
       !abilityToPay && dispatchError({ type: 'ABILITY_TO_PAY', payload: true });
       !description && dispatchError({ type: 'DESCRIPTION', payload: true });
       return;
     }
+
     const payload = {
       title,
       ability_to_pay: abilityToPay,
       description,
     };
+
     await wrapRequest({
       method: 'POST',
       url: `${API.URL}:${API.PORT}/needs/create`,
@@ -85,11 +94,11 @@ const NeedAddView = ({
     })
       .then(({ data: { message } }) => {
         handleClose();
-        setPage(
-          Number.isInteger(totalItems / PER_PAGE)
-            ? totalItems / PER_PAGE + 1
-            : Math.ceil(totalItems / PER_PAGE),
-        );
+        if (page !== resPage) {
+          setPage(resPage);
+        } else {
+          setRefresh((p) => p + 1);
+        }
         toast.success(message, {
           position: toast.POSITION.TOP_RIGHT,
         });
@@ -203,6 +212,7 @@ const NeedAddView = ({
               }}
               onClick={(e) => {
                 e.stopPropagation();
+                handleClose();
               }}
             >
               {CANCEL}

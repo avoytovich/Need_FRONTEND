@@ -1,7 +1,7 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import { Grid, Typography, IconButton, Stack, Divider } from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 
 import connect from 'utils/connectFunction';
 import action from 'utils/actions';
@@ -20,6 +20,7 @@ const Header = (props) => {
   // console.log('Header props', props);
 
   const navigate = useNavigate();
+  let location = useLocation();
 
   const {
     components: {
@@ -44,6 +45,18 @@ const Header = (props) => {
         break;
     }
   };
+
+  useEffect(() => {
+    if (location.pathname.startsWith('/needs')) {
+      props.dispatchActiveLink('saveActiveLink', 'NEEDS');
+    } else if (location.pathname.startsWith('/dashboard')) {
+      props.dispatchActiveLink('saveActiveLink', 'DASHBOARD');
+    } else if (location.pathname.startsWith('/profile')) {
+      props.dispatchActiveLink('saveActiveLink', 'PROFILE');
+    } else {
+      props.dispatchActiveLink('saveActiveLink', null);
+    }
+  }, [location]);
 
   return (
     <div className="wrapper-header">

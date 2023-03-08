@@ -2,7 +2,13 @@ import React, { useReducer, useState } from 'react';
 
 import NeedAddView from './NeedAddView';
 
-const NeedAddScreen = ({ handleClose, setPage, totalItems }) => {
+const NeedAddScreen = ({
+  handleClose,
+  page,
+  setPage,
+  setRefresh,
+  totalItems,
+}) => {
   const [title, setTitle] = useState('');
   const [abilityToPay, setAbilityToPay] = useState('');
   const [description, setDescription] = useState('');
@@ -29,7 +35,9 @@ const NeedAddScreen = ({ handleClose, setPage, totalItems }) => {
   return (
     <NeedAddView
       handleClose={handleClose}
+      page={page}
       setPage={setPage}
+      setRefresh={setRefresh}
       totalItems={totalItems}
       title={title}
       setTitle={setTitle}
