@@ -21,6 +21,10 @@ const NeedDetailsView = ({
   data: { owner_id, title, description, createdAt, status, ability_to_pay },
   currentUserId,
 }) => {
+  const [updTitle, setUpdTitle] = useState(title);
+  const [updAbility, setUpdAbility] = useState(ability_to_pay);
+  const [updDescription, setUpdDescription] = useState(description);
+
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => setOpen(true);
@@ -32,11 +36,12 @@ const NeedDetailsView = ({
   const {
     pages: {
       needsDetails: {
+        TITLE,
         STATUS,
         ABILITY_TO_PAY,
         DESCRIPTION,
         SAVE,
-        CANCEL,
+        RESET,
         DELETE,
         CONFIRMATION_DELETE,
         YES,
@@ -81,6 +86,54 @@ const NeedDetailsView = ({
       );
   };
 
+  const handleSave = (e) => {
+    e.stopPropagation();
+    const payload = {
+      title: updTitle,
+      ability_to_pay: updAbility,
+      description: updDescription,
+    };
+    wrapRequest({
+      method: 'PUT',
+      url: `${API.URL}:${API.PORT}/needs/${id}/update`,
+      mode: 'cors',
+      cache: 'default',
+      data: payload,
+    })
+      .then(() => {
+        toast.success(`Need - ${title} was successfully updated`, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+      })
+      .catch((err) =>
+        toast.error(err, {
+          position: toast.POSITION.TOP_RIGHT,
+        }),
+      );
+  };
+
+  const handleReset = (e) => {
+    e.stopPropagation();
+    setUpdTitle(title);
+    setUpdAbility(ability_to_pay);
+    setUpdDescription(description);
+  };
+
+  const handleTitle = (e) => {
+    e.stopPropagation();
+    setUpdTitle(e.target.value);
+  };
+
+  const handleAbility = (e) => {
+    e.stopPropagation();
+    setUpdAbility(e.target.value);
+  };
+
+  const handleDescription = (e) => {
+    e.stopPropagation();
+    setUpdDescription(e.target.value);
+  };
+
   return (
     <div className="wrapper-need-details">
       <Grid container spacing={0} className="container-need-details">
@@ -98,9 +151,14 @@ const NeedDetailsView = ({
             <Typography textAlign="center" variant="font_12_roboto">
               {handleDate(createdAt)}
             </Typography>
-            <Typography textAlign="center" variant="font_24_serif">
-              {title}
-            </Typography>
+            <TextField
+              label={TITLE}
+              size="small"
+              value={updTitle}
+              onChange={handleTitle}
+              disabled={owner_id !== currentUserId}
+              fullWidth
+            />
             <Box
               sx={{
                 margin: '2px 16px',
@@ -128,7 +186,7 @@ const NeedDetailsView = ({
             </Box>
             <Box
               sx={{
-                margin: '2px 16px',
+                margin: '20px 0px 0px',
                 display: 'flex',
                 flexDirection: 'row',
                 justifyContent: 'space-between',
@@ -137,18 +195,17 @@ const NeedDetailsView = ({
                 borderRadius: 1,
               }}
             >
-              <Box>
-                <Typography variant="font_14_roboto">
-                  {ABILITY_TO_PAY}
-                </Typography>
-              </Box>
-              <Box
-                sx={{
-                  textAlign: 'right',
+              <TextField
+                label={ABILITY_TO_PAY}
+                size="small"
+                inputProps={{
+                  type: 'number',
                 }}
-              >
-                {ability_to_pay}
-              </Box>
+                value={updAbility}
+                onChange={handleAbility}
+                disabled={owner_id !== currentUserId}
+                fullWidth
+              />
             </Box>
           </Stack>
         </Grid>
@@ -167,10 +224,12 @@ const NeedDetailsView = ({
             <TextField
               id="outlined-multiline-static"
               label={DESCRIPTION}
+              disabled={owner_id !== currentUserId}
               fullWidth
               multiline
-              rows={3}
-              defaultValue={description}
+              rows={5}
+              value={updDescription}
+              onChange={handleDescription}
             />
           </Stack>
           {owner_id === currentUserId && (
@@ -178,7 +237,7 @@ const NeedDetailsView = ({
               mt={5}
               display="flex"
               flexDirection="column"
-              justifyContent="flex-end"
+              justifyContent="center"
             >
               <Box ml={1} mb={1}>
                 <Button
@@ -228,6 +287,7 @@ const NeedDetailsView = ({
                           }}
                           onClick={(e) => {
                             e.stopPropagation();
+                            handleClose();
                           }}
                         >
                           {NO}
@@ -245,9 +305,7 @@ const NeedDetailsView = ({
                   style={{
                     width: '100px',
                   }}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                  }}
+                  onClick={handleSave}
                 >
                   {SAVE}
                 </Button>
@@ -259,11 +317,9 @@ const NeedDetailsView = ({
                   style={{
                     width: '100px',
                   }}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                  }}
+                  onClick={handleReset}
                 >
-                  {CANCEL}
+                  {RESET}
                 </Button>
               </Box>
             </Box>
