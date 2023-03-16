@@ -12,6 +12,7 @@ import {
   Login,
   Needs,
   NeedDetails,
+  AdminPanel,
   Test,
 } from 'pages';
 import checkAuth from 'utils/checkAuth';
@@ -57,6 +58,14 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <NeedDetails />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/admin',
+    element: (
+      <ProtectedRoute>
+        <AdminPanel />
       </ProtectedRoute>
     ),
   },

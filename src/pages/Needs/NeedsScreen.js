@@ -76,13 +76,15 @@ const NeedsScreen = (props) => {
         setData(needs);
         setTotalItems(totalItems);
         setTotalPages(totalPages);
-        setLoading(false);
       })
       .catch((err) =>
         toast.error(err, {
           position: toast.POSITION.TOP_RIGHT,
         }),
-      );
+      )
+      .finally(() => {
+        setLoading(false);
+      });
   }, [page, search, actual, noActual, inProgress, refresh]);
 
   if (loading) {
