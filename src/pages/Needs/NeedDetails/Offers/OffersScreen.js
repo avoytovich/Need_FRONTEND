@@ -23,13 +23,15 @@ const OffersScreen = ({ isOwnerNeed }) => {
     })
       .then(({ data }) => {
         setData(data);
-        setLoading(false);
       })
       .catch((err) =>
         toast.error(err, {
           position: toast.POSITION.TOP_RIGHT,
         }),
-      );
+      )
+      .finally(() => {
+        setLoading(false);
+      });
   }, [id]);
 
   if (loading) {

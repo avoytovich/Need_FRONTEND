@@ -1,14 +1,17 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { Grid, Typography, IconButton, Stack, Divider } from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
+import { wrapRequest } from 'utils/api';
 import connect from 'utils/connectFunction';
 import action from 'utils/actions';
 import checkAuth from 'utils/checkAuth';
 import CustomizeIcon from 'utils/customizeIcon';
-import { text } from 'helper/constants';
+import { text, API } from 'helper/constants';
 import { links } from './constants';
+import { Loader } from 'components';
 
 import imageLogo from 'assets/images/logo.svg';
 import imageAvatar from 'assets/images/avatar.svg';
@@ -18,6 +21,8 @@ import './header.sass';
 
 const Header = (props) => {
   // console.log('Header props', props);
+  const [currentUser, setCurrentUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
   let location = useLocation();
@@ -58,6 +63,30 @@ const Header = (props) => {
     }
   }, [location]);
 
+  useEffect(() => {
+    wrapRequest({
+      method: 'GET',
+      url: `${API.URL}:${API.PORT}/user/${props.store.userId}`,
+      mode: 'cors',
+      cache: 'default',
+    })
+      .then(({ data: { user } }) => {
+        setCurrentUser(user);
+      })
+      .catch((err) =>
+        toast.error(err, {
+          position: toast.POSITION.TOP_RIGHT,
+        }),
+      )
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [props.store.userId]);
+
+  if (loading) {
+    return <Loader />;
+  }
+
   return (
     <div className="wrapper-header">
       <Grid container spacing={0} justifyContent="center">
@@ -95,24 +124,26 @@ const Header = (props) => {
                 }
                 spacing={1}
               >
-                {links.map((item) => {
-                  return (
-                    <Link
-                      key={item.id}
-                      to={item.route}
-                      className="link"
-                      onClick={() => resolveOnClickLink(item.title)}
-                    >
-                      <Typography
-                        className={`link-title ${
-                          props.store.activeLink === item.title && 'active'
-                        }`}
+                {links[currentUser?.isAdmin ? 'withAdmin' : 'withoutAdmin'].map(
+                  (item) => {
+                    return (
+                      <Link
+                        key={item.id}
+                        to={item.route}
+                        className="link"
+                        onClick={() => resolveOnClickLink(item.title)}
                       >
-                        {item.title}
-                      </Typography>
-                    </Link>
-                  );
-                })}
+                        <Typography
+                          className={`link-title ${
+                            props.store.activeLink === item.title && 'active'
+                          }`}
+                        >
+                          {item.title}
+                        </Typography>
+                      </Link>
+                    );
+                  },
+                )}
               </Stack>
             )}
           </Grid>

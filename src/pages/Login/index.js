@@ -55,37 +55,35 @@ const Login = (props) => {
     }
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
     const payload = {
       email,
       password,
     };
-    const loginUser = await wrapRequest({
+    wrapRequest({
       method: 'POST',
       url: `${API.URL}:${API.PORT}/login`,
       mode: 'cors',
       cache: 'default',
       data: payload,
-    });
-    const {
-      data: { token },
-    } = loginUser;
-    const {
-      data: { userId },
-    } = loginUser;
-    if (token && userId) {
-      props.dispatchSaveUserId('saveUserId', userId);
-      localStorage.setItem('token', JSON.stringify(token));
-      navigate('/user/dashboard');
-      toast.success('Nice to meet NICKNAME', {
-        position: toast.POSITION.TOP_RIGHT,
+    })
+      .then(({ data: { message, token, userId } }) => {
+        toast.success(message, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+        if (token && userId) {
+          props.dispatchSaveUserId('saveUserId', userId);
+          localStorage.setItem('token', JSON.stringify(token));
+          navigate('/user/dashboard');
+        }
+      })
+      .catch((err) => {
+        console.log('err', err);
+        toast.warning('Something went wrong...', {
+          position: toast.POSITION.TOP_RIGHT,
+        });
       });
-    } else {
-      toast.warning('Something went wrong...with login', {
-        position: toast.POSITION.TOP_RIGHT,
-      });
-    }
   };
 
   return (

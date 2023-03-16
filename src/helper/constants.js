@@ -28,6 +28,9 @@ const text = {
     login: {
       LOG_IN_SIGN_UP: 'Log In / Sign Up',
     },
+    admin: {
+      TITLE: 'ACTIVATION / DISACTIVATION USERS',
+    },
     needs: {
       NEEDS: 'Needs',
       CREATE: 'Create',
