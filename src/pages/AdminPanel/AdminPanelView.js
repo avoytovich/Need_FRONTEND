@@ -14,7 +14,14 @@ import imageAvatar from 'assets/images/avatar.svg';
 import { text } from 'helper/constants';
 
 const AdminPanelView = ({ data, activation, deactivation, deleteUser }) => {
-  const [checked, setChecked] = useState([1]);
+  const [checked, setChecked] = useState(
+    data.reduce((acc, user) => {
+      if (user.isActivate) {
+        acc = [...acc, user.id];
+      }
+      return acc;
+    }, []),
+  );
 
   const {
     pages: {
