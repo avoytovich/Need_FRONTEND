@@ -21,7 +21,11 @@ const AuthContext = React.createContext(null);
 
 const AuthProvider = ({ children, userId }) => {
   const isAuth = checkAuth(userId);
-  return <AuthContext.Provider value={isAuth}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={{ isAuth, userId }}>
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
 const useAuth = () => {
@@ -29,10 +33,10 @@ const useAuth = () => {
 };
 
 const ProtectedRoute = ({ children }) => {
-  const isAuth = useAuth();
+  const { isAuth, userId } = useAuth();
   const location = useLocation();
 
-  if (!isAuth) {
+  if (!isAuth || (location.pathname === '/admin' && userId !== 1)) {
     return <Navigate to="/" replace state={{ from: location }} />;
   }
 
