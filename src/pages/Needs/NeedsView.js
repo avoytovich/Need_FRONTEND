@@ -242,7 +242,7 @@ const NeedsView = ({
           </Box>
         </Grid>
         <Grid item xs={1} sm={1} />
-        <Grid item xs={8} sm={8}>
+        <Grid item xs={8} sm={8} className="container-needs-content">
           <Box m={2} display="flex" justifyContent="flex-start" flexWrap="wrap">
             {data.map(({ id, ability_to_pay, createdAt, status, title }) => (
               <Box

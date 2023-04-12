@@ -20,6 +20,7 @@ const Login = (props) => {
 
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
+  const [refresh, setRefresh] = useState(false);
 
   const navigate = useNavigate();
 
@@ -75,7 +76,7 @@ const Login = (props) => {
         if (token && userId) {
           props.dispatchSaveUserId('saveUserId', userId);
           localStorage.setItem('token', JSON.stringify(token));
-          navigate('/user/dashboard');
+          setRefresh(true);
         }
       })
       .catch((err) => {
@@ -85,6 +86,10 @@ const Login = (props) => {
         });
       });
   };
+
+  if (refresh) {
+    navigate('/dashboard');
+  }
 
   return (
     <div className="wrapper-landing-login">
