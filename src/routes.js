@@ -7,7 +7,8 @@ import {
 } from 'react-router-dom';
 
 import {
-  // Dashboard,
+  Dashboard,
+  DashboardNeeds,
   ErrorPage,
   Login,
   Needs,
@@ -48,6 +49,22 @@ const router = createBrowserRouter([
     path: '/',
     element: <Login />,
     errorElement: <ErrorPage />,
+  },
+  {
+    path: '/dashboard',
+    element: (
+      <ProtectedRoute>
+        <Dashboard />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/dashboard/needs',
+    element: (
+      <ProtectedRoute>
+        <DashboardNeeds />
+      </ProtectedRoute>
+    ),
   },
   {
     path: '/needs',
