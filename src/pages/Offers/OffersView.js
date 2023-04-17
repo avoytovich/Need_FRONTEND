@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState, Fragment, useEffect } from 'react';
 
 import {
   Button,
@@ -22,7 +22,7 @@ const OffersView = ({ data, isOwnerNeed }) => {
   const [value, setValue] = useState(0);
   const [open, setOpen] = useState(false);
   const [paginOffers, setPaginOffers] = useState(0);
-  const [dataOffers, setDataOffers] = useState(data.slice(0, 5));
+  const [dataOffers, setDataOffers] = useState([]);
 
   const {
     pages: {
@@ -129,6 +129,10 @@ const OffersView = ({ data, isOwnerNeed }) => {
       </Box>
     </Box>
   );
+
+  useEffect(() => {
+    setDataOffers(data.slice(0, 5));
+  }, [data]);
 
   return (
     <>

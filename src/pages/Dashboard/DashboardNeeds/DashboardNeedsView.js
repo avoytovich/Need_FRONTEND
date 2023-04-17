@@ -25,6 +25,7 @@ import {
   CustomAbilityToPay,
   CustomDescription,
 } from './CustomComponents';
+import Offers from 'pages/Offers';
 import { withLayout } from 'hocs';
 import { text, API } from 'helper/constants';
 import { wrapRequest } from 'utils/api';
@@ -358,6 +359,7 @@ const DashboardNeedsView = ({ data }) => {
   return (
     <div className="wrapper-dashboard-needs-view">
       <Grid container spacing={0} className="container-dashboard-needs-view">
+        <Grid item xs={1} sm={1} />
         <Grid item xs={10} sm={10}>
           <Stack
             sx={{
@@ -624,6 +626,23 @@ const DashboardNeedsView = ({ data }) => {
             </Box>
           </Stack>
         </Grid>
+        <Grid item xs={1} sm={1} />
+        <Grid item xs={1} sm={1} />
+        <Grid item xs={10} sm={10}>
+          <Stack
+            sx={{
+              margin: 1,
+              justifyContent: 'center',
+              alignItems: 'center',
+              padding: 1,
+              backgroundColor: colors['white'],
+              borderRadius: 1,
+            }}
+          >
+            <Offers isOwnerNeed needId={dataNeeds[value].id} />
+          </Stack>
+        </Grid>
+        <Grid item xs={1} sm={1} />
       </Grid>
     </div>
   );
