@@ -11,7 +11,7 @@ import {
   Modal,
 } from '@mui/material';
 
-import Offers from './Offers';
+import Offers from 'pages/Offers';
 import { text, API } from 'helper/constants';
 import { wrapRequest } from 'utils/api';
 

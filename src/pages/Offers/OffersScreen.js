@@ -7,14 +7,14 @@ import { API } from 'helper/constants';
 import { Loader } from 'components';
 import OffersView from './OffersView.js';
 
-const OffersScreen = ({ isOwnerNeed }) => {
+const OffersScreen = ({ isOwnerNeed, needId }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const { id } = useParams();
 
   useEffect(() => {
-    let url = `${API.URL}:${API.PORT}/offers-to-need?needId=${id}`;
+    let url = `${API.URL}:${API.PORT}/offers-to-need?needId=${id || needId}`;
     wrapRequest({
       method: 'GET',
       url,
@@ -32,7 +32,7 @@ const OffersScreen = ({ isOwnerNeed }) => {
       .finally(() => {
         setLoading(false);
       });
-  }, [id]);
+  }, [id, needId]);
 
   if (loading) {
     return <Loader />;

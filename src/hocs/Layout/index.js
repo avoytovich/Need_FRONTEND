@@ -8,11 +8,11 @@ const withLayout = (Component) => {
   return (props) => {
     return (
       <React.Fragment>
-        <Header />
         <div className="container-layout">
+          <Header />
           <Component {...props} />
+          <Footer />
         </div>
-        <Footer />
       </React.Fragment>
     );
   };

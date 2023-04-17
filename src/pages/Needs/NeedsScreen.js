@@ -130,7 +130,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(withLayout(NeedsScreen));
+export default connect(mapStateToProps, mapDispatchToProps)(NeedsScreen);
