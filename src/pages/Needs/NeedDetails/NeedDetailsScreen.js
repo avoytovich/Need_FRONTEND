@@ -12,6 +12,7 @@ import NeedDetailsView from './NeedDetailsView';
 const NeedDetailsScreen = ({ store: { userId } }) => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [refreshNeed, setRefreshNeed] = useState(false);
 
   const { id } = useParams();
 
@@ -34,13 +35,20 @@ const NeedDetailsScreen = ({ store: { userId } }) => {
       .finally(() => {
         setLoading(false);
       });
-  }, [id]);
+  }, [id, refreshNeed]);
 
   if (loading) {
     return <Loader />;
   }
 
-  return <NeedDetailsView data={data} currentUserId={userId} />;
+  return (
+    <NeedDetailsView
+      data={data}
+      currentUserId={userId}
+      refreshNeed={refreshNeed}
+      setRefreshNeed={setRefreshNeed}
+    />
+  );
 };
 
 const mapStateToProps = (state) => {

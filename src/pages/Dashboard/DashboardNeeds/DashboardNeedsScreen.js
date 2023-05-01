@@ -12,6 +12,7 @@ import { Loader } from 'components';
 const DashboardNeedsScreen = ({ store: { userId } }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [refreshNeed, setRefreshNeed] = useState(false);
 
   useEffect(() => {
     let url = `${API.URL}:${API.PORT}/needs-all/${userId}`;
@@ -22,6 +23,7 @@ const DashboardNeedsScreen = ({ store: { userId } }) => {
       cache: 'default',
     })
       .then(({ data: { needs } }) => {
+        needs.sort((a, b) => a.id - b.id);
         setData(needs);
       })
       .catch((err) =>
@@ -32,13 +34,19 @@ const DashboardNeedsScreen = ({ store: { userId } }) => {
       .finally(() => {
         setLoading(false);
       });
-  }, [userId]);
+  }, [userId, refreshNeed]);
 
   if (loading) {
     return <Loader />;
   }
 
-  return <DashboardNeedsView data={data} />;
+  return (
+    <DashboardNeedsView
+      data={data}
+      refreshNeed={refreshNeed}
+      setRefreshNeed={setRefreshNeed}
+    />
+  );
 };
 
 const mapStateToProps = (state) => {

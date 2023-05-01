@@ -18,8 +18,11 @@ import { wrapRequest } from 'utils/api';
 import colors from 'helper/colors.sass';
 
 const NeedDetailsView = ({
+  data,
   data: { owner_id, title, description, createdAt, status, ability_to_pay },
   currentUserId,
+  refreshNeed,
+  setRefreshNeed,
 }) => {
   const [updTitle, setUpdTitle] = useState(title);
   const [updAbility, setUpdAbility] = useState(ability_to_pay);
@@ -80,11 +83,11 @@ const NeedDetailsView = ({
 
   const handleBackground = (status) => {
     switch (status) {
-      case 'in progress':
+      case 'in_progress':
         return colors['blue-light'];
       case 'actual':
         return colors['green-light'];
-      case 'not actual':
+      case 'not_actual':
         return colors['red-light'];
       default:
         break;
@@ -395,7 +398,12 @@ const NeedDetailsView = ({
               borderRadius: 1,
             }}
           >
-            <Offers isOwnerNeed={owner_id === currentUserId} />
+            <Offers
+              isOwnerNeed={owner_id === currentUserId}
+              need={data}
+              refreshNeed={refreshNeed}
+              setRefreshNeed={setRefreshNeed}
+            />
           </Stack>
         </Grid>
         <Grid item xs={1} sm={1} />

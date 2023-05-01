@@ -33,7 +33,7 @@ import { wrapRequest } from 'utils/api';
 import colors from 'helper/colors.sass';
 import './dashboard_need.sass';
 
-const DashboardNeedsView = ({ data }) => {
+const DashboardNeedsView = ({ data, refreshNeed, setRefreshNeed }) => {
   const [value, setValue] = useState(0);
   const [paginNeeds, setPaginNeeds] = useState(0);
   const [dataNeeds, setDataNeeds] = useState(data.slice(0, 5));
@@ -211,11 +211,11 @@ const DashboardNeedsView = ({ data }) => {
 
   const handleBackground = (status) => {
     switch (status) {
-      case 'in progress':
+      case 'in_progress':
         return colors['blue-light'];
       case 'actual':
         return colors['green-light'];
-      case 'not actual':
+      case 'not_actual':
         return colors['red-light'];
       default:
         break;
@@ -356,6 +356,10 @@ const DashboardNeedsView = ({ data }) => {
     setUpdDescription({ type: 'DESCRIPTION_INITIAL' });
   }, [dataNeeds[0].id]);
 
+  useEffect(() => {
+    setDataNeeds(data.slice(0, 5));
+  }, [data]);
+
   return (
     <div className="wrapper-dashboard-needs-view">
       <Grid container spacing={0} className="container-dashboard-needs-view">
@@ -491,7 +495,7 @@ const DashboardNeedsView = ({ data }) => {
                           />
                         </Box>
                       </Grid>
-                      <Grid xs={1} sm={1} />
+                      <Grid item xs={1} sm={1} />
                       <Grid
                         item
                         xs={5}
@@ -512,8 +516,8 @@ const DashboardNeedsView = ({ data }) => {
                           errors={errors}
                         />
                       </Grid>
-                      <Grid xs={1} sm={1} />
-                      <Grid xs={2} sm={2}>
+                      <Grid item xs={1} sm={1} />
+                      <Grid item xs={2} sm={2}>
                         <Box
                           mt={5}
                           display="flex"
@@ -639,7 +643,12 @@ const DashboardNeedsView = ({ data }) => {
               borderRadius: 1,
             }}
           >
-            <Offers isOwnerNeed needId={dataNeeds[value].id} />
+            <Offers
+              isOwnerNeed
+              need={dataNeeds[value]}
+              refreshNeed={refreshNeed}
+              setRefreshNeed={setRefreshNeed}
+            />
           </Stack>
         </Grid>
         <Grid item xs={1} sm={1} />
