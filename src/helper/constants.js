@@ -62,15 +62,22 @@ const text = {
     offers: {
       ACCEPT: 'ACCEPT',
       REJECT: 'REJECT',
+      CHAT: 'CHAT',
       NO_OFFERS: 'No Offers',
       ADD_OFFER: 'ADD OFFER',
       DESCRIPTION: 'Description',
+      ISACCEPTED: 'THIS OFFER IS ACCEPTED',
+      PROHIBITION: 'PROHIBITION TO ACCEPT: ONLY ONE OFFER CAN BE ACCEPTED',
     },
     offerAdd: {
       CREATING_OFFER: 'CREATING OFFER',
       DESCRIPTION: 'Description',
       SAVE: 'SAVE',
       CANCEL: 'CANCEL',
+    },
+    chat: {
+      CREATE_MESSAGE: 'Create message',
+      SEND: 'Send',
     },
   },
 };

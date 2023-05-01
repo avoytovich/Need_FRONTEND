@@ -125,11 +125,11 @@ const NeedsView = ({
 
   const handleBackground = (status) => {
     switch (status) {
-      case 'in progress':
+      case 'in_progress':
         return colors['blue-light'];
       case 'actual':
         return colors['green-light'];
-      case 'not actual':
+      case 'not_actual':
         return colors['red-light'];
       default:
         break;

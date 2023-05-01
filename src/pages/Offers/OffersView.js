@@ -1,4 +1,5 @@
 import React, { useState, Fragment, useEffect } from 'react';
+import { toast } from 'react-toastify';
 
 import {
   Button,
@@ -13,20 +14,41 @@ import {
 
 import { ArrowForwardIos, ArrowBackIos } from '@mui/icons-material';
 
-import { text } from 'helper/constants';
+import { text, API } from 'helper/constants';
+import { wrapRequest } from 'utils/api';
 import OfferAdd from './OfferAdd';
+import Chat from 'pages/Chat';
 
 import colors from 'helper/colors.sass';
+import './offer.sass';
 
-const OffersView = ({ data, isOwnerNeed }) => {
+const OffersView = ({
+  data,
+  isOwnerNeed,
+  need,
+  refreshOffer,
+  setRefreshOffer,
+  refreshNeed,
+  setRefreshNeed,
+}) => {
   const [value, setValue] = useState(0);
   const [open, setOpen] = useState(false);
   const [paginOffers, setPaginOffers] = useState(0);
   const [dataOffers, setDataOffers] = useState([]);
+  const [refreshChat, setRefreshChat] = useState(false);
 
   const {
     pages: {
-      offers: { ACCEPT, REJECT, NO_OFFERS, ADD_OFFER, DESCRIPTION },
+      offers: {
+        ACCEPT,
+        REJECT,
+        CHAT,
+        NO_OFFERS,
+        ADD_OFFER,
+        DESCRIPTION,
+        ISACCEPTED,
+        PROHIBITION,
+      },
     },
   } = text;
 
@@ -81,30 +103,105 @@ const OffersView = ({ data, isOwnerNeed }) => {
     };
   };
 
+  const handleRejection = (e) => {
+    let url = `${API.URL}:${API.PORT}/offer/${data[value].id}/accept_reject`;
+    const payload = { isAccepted: false };
+    wrapRequest({
+      method: 'PUT',
+      url,
+      mode: 'cors',
+      cache: 'default',
+      data: payload,
+    })
+      .then(({ data }) => {
+        toast.success(data.message, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+      })
+      .catch((err) =>
+        toast.error(err, {
+          position: toast.POSITION.TOP_RIGHT,
+        }),
+      )
+      .finally(() => {
+        setRefreshNeed(!refreshNeed);
+        setRefreshOffer(!refreshOffer);
+      });
+  };
+
+  const handleAcception = (e) => {
+    let url = `${API.URL}:${API.PORT}/offer/${data[value].id}/accept_reject`;
+    const payload = { isAccepted: true };
+    wrapRequest({
+      method: 'PUT',
+      url,
+      mode: 'cors',
+      cache: 'default',
+      data: payload,
+    })
+      .then(({ data }) => {
+        toast.success(data.message, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+      })
+      .catch((err) =>
+        toast.error(err, {
+          position: toast.POSITION.TOP_RIGHT,
+        }),
+      )
+      .finally(() => {
+        setRefreshNeed(!refreshNeed);
+        setRefreshOffer(!refreshOffer);
+      });
+  };
+
   const flowIfIsOwner = data.length ? (
     <Box display="flex" justifyContent="center">
-      <Box m="32px 32px 0px 32px">
-        <Button
-          color="green_light"
-          variant="contained"
-          onClick={(e) => {
-            e.stopPropagation();
-          }}
-        >
-          {ACCEPT}
-        </Button>
-      </Box>
-      <Box m="32px 32px 0px 32px">
-        <Button
-          color="red_light"
-          variant="contained"
-          onClick={(e) => {
-            e.stopPropagation();
-          }}
-        >
-          {REJECT}
-        </Button>
-      </Box>
+      {need.status !== 'in_progress' && (
+        <Box m="32px 32px 0px 32px">
+          <Button
+            color="green_light"
+            variant="contained"
+            onClick={handleAcception}
+          >
+            {ACCEPT}
+          </Button>
+        </Box>
+      )}
+      {need.status === 'in_progress' && data[value].isAccepted && (
+        <Box m="32px 32px 0px 32px" display="flex" justifyContent="center">
+          <Box mr={2}>
+            <Button
+              color="red_light"
+              variant="contained"
+              onClick={handleRejection}
+            >
+              {REJECT}
+            </Button>
+          </Box>
+          <Box ml={2}>
+            <Button color="blue_light" variant="contained" onClick={handleOpen}>
+              {CHAT}
+            </Button>
+          </Box>
+          <Modal
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+            className="modal-chat"
+          >
+            <Box>
+              <Chat
+                needId={need.id}
+                offerId={data[value].id}
+                refreshChat={refreshChat}
+                setRefreshChat={setRefreshChat}
+              />
+            </Box>
+          </Modal>
+        </Box>
+      )}
     </Box>
   ) : (
     <Typography variant="font_14_roboto">{NO_OFFERS}</Typography>
@@ -133,6 +230,10 @@ const OffersView = ({ data, isOwnerNeed }) => {
   useEffect(() => {
     setDataOffers(data.slice(0, 5));
   }, [data]);
+
+  useEffect(() => {
+    setValue(0);
+  }, [need.id]);
 
   return (
     <>
@@ -176,6 +277,19 @@ const OffersView = ({ data, isOwnerNeed }) => {
           <Box>
             {dataOffers.map((item, ind) => (
               <TabPanel key={item.id} value={value} index={ind}>
+                {need.status === 'in_progress' && (
+                  <Box mb={2}>
+                    {item.isAccepted ? (
+                      <Typography variant="font_14_roboto_green">
+                        {ISACCEPTED}
+                      </Typography>
+                    ) : (
+                      <Typography variant="font_14_roboto_red">
+                        {PROHIBITION}
+                      </Typography>
+                    )}
+                  </Box>
+                )}
                 <TextField
                   id="outlined-multiline-static"
                   label={DESCRIPTION}

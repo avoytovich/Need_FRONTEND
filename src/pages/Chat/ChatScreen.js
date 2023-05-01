@@ -1,21 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import { wrapRequest } from 'utils/api';
 import { API } from 'helper/constants';
 import { Loader } from 'components';
-import OffersView from './OffersView.js';
 
-const OffersScreen = ({ isOwnerNeed, need, refreshNeed, setRefreshNeed }) => {
+import ChatView from './ChatView';
+
+const ChatScreen = ({ needId, offerId, refreshChat, setRefreshChat }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [refreshOffer, setRefreshOffer] = useState(false);
-
-  const { id } = useParams();
 
   useEffect(() => {
-    let url = `${API.URL}:${API.PORT}/offers-to-need?needId=${id || need.id}`;
+    let url = `${API.URL}:${API.PORT}/chat?needId=${needId}&offerId=${offerId}`;
     wrapRequest({
       method: 'GET',
       url,
@@ -23,7 +20,6 @@ const OffersScreen = ({ isOwnerNeed, need, refreshNeed, setRefreshNeed }) => {
       cache: 'default',
     })
       .then(({ data }) => {
-        data.sort((a, b) => a.id - b.id);
         setData(data);
       })
       .catch((err) =>
@@ -34,23 +30,19 @@ const OffersScreen = ({ isOwnerNeed, need, refreshNeed, setRefreshNeed }) => {
       .finally(() => {
         setLoading(false);
       });
-  }, [id, need.id, refreshOffer]);
+  }, [needId, offerId]);
 
   if (loading) {
     return <Loader />;
   }
 
   return (
-    <OffersView
+    <ChatView
       data={data}
-      isOwnerNeed={isOwnerNeed}
-      need={need}
-      refreshOffer={refreshOffer}
-      setRefreshOffer={setRefreshOffer}
-      refreshNeed={refreshNeed}
-      setRefreshNeed={setRefreshNeed}
+      refreshChat={refreshChat}
+      setRefreshChat={setRefreshChat}
     />
   );
 };
 
-export default OffersScreen;
+export default ChatScreen;

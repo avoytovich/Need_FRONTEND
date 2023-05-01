@@ -37,6 +37,18 @@ export const theme = createTheme({
       fontFamily: 'Roboto',
       fontWeight: 500,
     },
+    font_14_roboto_red: {
+      fontSize: 14,
+      color: colors['red-light'],
+      fontFamily: 'Roboto',
+      fontWeight: 500,
+    },
+    font_14_roboto_green: {
+      fontSize: 14,
+      color: colors['green-light'],
+      fontFamily: 'Roboto',
+      fontWeight: 500,
+    },
     font_14_uppercase: {
       fontSize: 14,
       fontWeight: 500,

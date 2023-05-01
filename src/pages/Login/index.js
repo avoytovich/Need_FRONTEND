@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Grid, TextField, Button, Stack } from '@mui/material';
 import { toast } from 'react-toastify';
@@ -87,9 +87,11 @@ const Login = (props) => {
       });
   };
 
-  if (refresh) {
-    navigate('/dashboard');
-  }
+  useEffect(() => {
+    if (refresh) {
+      navigate('/dashboard');
+    }
+  }, [refresh]);
 
   return (
     <div className="wrapper-landing-login">

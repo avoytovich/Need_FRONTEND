@@ -61,10 +61,10 @@ const NeedsScreen = (props) => {
       url += `&filter=actual`;
     }
     if (noActual) {
-      url += `&filter=not actual`;
+      url += `&filter=not_actual`;
     }
     if (inProgress) {
-      url += `&filter=in progress`;
+      url += `&filter=in_progress`;
     }
     wrapRequest({
       method: 'GET',
