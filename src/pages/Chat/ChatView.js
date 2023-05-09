@@ -7,7 +7,8 @@ import { wrapRequest } from 'utils/api';
 
 import colors from 'helper/colors.sass';
 
-const ChatView = ({ data, refreshChat, setRefreshChat }) => {
+const ChatView = ({ needId, offerId, data, refreshChat, setRefreshChat }) => {
+  // console.log('data', data);
   const [message, setMessage] = useState('');
 
   const {
@@ -19,10 +20,17 @@ const ChatView = ({ data, refreshChat, setRefreshChat }) => {
   const handleMessage = (e) => setMessage(e.target.value);
 
   const handleSendMessage = () => {
-    let url = `${API.URL}:${API.PORT}/chat/create_update?needId=${data.chat.need_id}&offerId=${data.chat.offer_id}`;
-    const payload = {
-      messeges: [...data.chat.messeges, `needOwner: ${message}`],
-    };
+    let url = `${API.URL}:${API.PORT}/chat/create_update?needId=${needId}&offerId=${offerId}`;
+    let payload;
+    if (data.chat) {
+      payload = {
+        messeges: [...data.chat.messeges, `needOwner: ${message}`],
+      };
+    } else {
+      payload = {
+        messeges: [`needOwner: ${message}`],
+      };
+    }
     wrapRequest({
       method: 'POST',
       url,
@@ -55,7 +63,7 @@ const ChatView = ({ data, refreshChat, setRefreshChat }) => {
           borderRadius: '5px',
         }}
       >
-        {data.chat.messeges.map((item) => (
+        {data.chat?.messeges.map((item) => (
           <Box
             sx={{
               display: 'flex',

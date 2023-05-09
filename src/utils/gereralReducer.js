@@ -5,6 +5,11 @@ const generalReducer = (state, action) => {
         ...state,
         userId: action.payload,
       };
+    case 'SAVE_USER':
+      return {
+        ...state,
+        user: action.payload,
+      };
     case 'SAVE_ACTIVE_LINK':
       return {
         ...state,

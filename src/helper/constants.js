@@ -49,6 +49,7 @@ const text = {
       CONFIRMATION_DELETE: 'Do you still want to delete this NEED?',
       YES: 'YES',
       NO: 'NO',
+      NO_NEEDS: 'No Needs',
     },
     needAdd: {
       CREATING_NEED: 'CREATING NEED',
@@ -62,6 +63,12 @@ const text = {
     offers: {
       ACCEPT: 'ACCEPT',
       REJECT: 'REJECT',
+      SAVE: 'SAVE',
+      RESET: 'RESET',
+      DELETE: 'DELETE',
+      CONFIRMATION_DELETE: 'Do you still want to delete this OFFER?',
+      YES: 'YES',
+      NO: 'NO',
       CHAT: 'CHAT',
       NO_OFFERS: 'No Offers',
       ADD_OFFER: 'ADD OFFER',

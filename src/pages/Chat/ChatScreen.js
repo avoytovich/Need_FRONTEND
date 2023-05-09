@@ -38,6 +38,8 @@ const ChatScreen = ({ needId, offerId, refreshChat, setRefreshChat }) => {
 
   return (
     <ChatView
+      needId={needId}
+      offerId={offerId}
       data={data}
       refreshChat={refreshChat}
       setRefreshChat={setRefreshChat}

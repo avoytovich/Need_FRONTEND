@@ -21,7 +21,6 @@ import './header.sass';
 
 const Header = (props) => {
   // console.log('Header props', props);
-  const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
@@ -36,6 +35,7 @@ const Header = (props) => {
   const handleLogOut = () => {
     localStorage.setItem('token', JSON.stringify(null));
     props.dispatchSaveUserId('saveUserId', null);
+    props.dispatchSaveUser('saveUser', null);
   };
 
   const isAuth = checkAuth(props.store.userId);
@@ -64,24 +64,28 @@ const Header = (props) => {
   }, [location]);
 
   useEffect(() => {
-    wrapRequest({
-      method: 'GET',
-      url: `${API.URL}:${API.PORT}/user/${props.store.userId}`,
-      mode: 'cors',
-      cache: 'default',
-    })
-      .then(({ data: { user } }) => {
-        setCurrentUser(user);
+    if (!props.store.userId || props.store.user?.id === props.store.userId) {
+      setLoading(false);
+    } else {
+      wrapRequest({
+        method: 'GET',
+        url: `${API.URL}:${API.PORT}/user/${props.store.userId}`,
+        mode: 'cors',
+        cache: 'default',
       })
-      .catch((err) =>
-        toast.error(err, {
-          position: toast.POSITION.TOP_RIGHT,
-        }),
-      )
-      .finally(() => {
-        setLoading(false);
-      });
-  }, [props.store.userId]);
+        .then(({ data: { user } }) => {
+          props.dispatchSaveUser('saveUser', user);
+        })
+        .catch((err) =>
+          toast.error(err, {
+            position: toast.POSITION.TOP_RIGHT,
+          }),
+        )
+        .finally(() => {
+          setLoading(false);
+        });
+    }
+  }, []);
 
   if (loading) {
     return <Loader />;
@@ -124,26 +128,26 @@ const Header = (props) => {
                 }
                 spacing={1}
               >
-                {links[currentUser?.isAdmin ? 'withAdmin' : 'withoutAdmin'].map(
-                  (item) => {
-                    return (
-                      <Link
-                        key={item.id}
-                        to={item.route}
-                        className="link"
-                        onClick={() => resolveOnClickLink(item.title)}
+                {links[
+                  props.store.user?.isAdmin ? 'withAdmin' : 'withoutAdmin'
+                ].map((item) => {
+                  return (
+                    <Link
+                      key={item.id}
+                      to={item.route}
+                      className="link"
+                      onClick={() => resolveOnClickLink(item.title)}
+                    >
+                      <Typography
+                        className={`link-title ${
+                          props.store.activeLink === item.title && 'active'
+                        }`}
                       >
-                        <Typography
-                          className={`link-title ${
-                            props.store.activeLink === item.title && 'active'
-                          }`}
-                        >
-                          {item.title}
-                        </Typography>
-                      </Link>
-                    );
-                  },
-                )}
+                        {item.title}
+                      </Typography>
+                    </Link>
+                  );
+                })}
               </Stack>
             )}
           </Grid>
@@ -180,6 +184,7 @@ const mapDispatchToProps = (dispatch) => {
   const actionData = (name, payload) => dispatch(action(name, payload));
   return {
     dispatchSaveUserId: actionData,
+    dispatchSaveUser: actionData,
     dispatchActiveLink: actionData,
   };
 };

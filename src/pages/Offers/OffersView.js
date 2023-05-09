@@ -57,19 +57,15 @@ const OffersView = ({
 
   const paginDataForward = () => {
     if (data.length > 5) {
-      setDataOffers(
-        data.slice((paginOffers + 1) * 5, (paginOffers + 1) * 5 + 5),
-      );
       setPaginOffers((s) => (s += 1));
+      setValue(0);
     }
   };
 
   const paginDataBack = () => {
     if (data.length > 5) {
-      setDataOffers(
-        data.slice((paginOffers - 1) * 5, (paginOffers - 1) * 5 + 5),
-      );
       setPaginOffers((s) => (s -= 1));
+      setValue(0);
     }
   };
 
@@ -104,7 +100,7 @@ const OffersView = ({
   };
 
   const handleRejection = (e) => {
-    let url = `${API.URL}:${API.PORT}/offer/${data[value].id}/accept_reject`;
+    let url = `${API.URL}:${API.PORT}/offer/${dataOffers[value].id}/accept_reject`;
     const payload = { isAccepted: false };
     wrapRequest({
       method: 'PUT',
@@ -130,7 +126,7 @@ const OffersView = ({
   };
 
   const handleAcception = (e) => {
-    let url = `${API.URL}:${API.PORT}/offer/${data[value].id}/accept_reject`;
+    let url = `${API.URL}:${API.PORT}/offer/${dataOffers[value].id}/accept_reject`;
     const payload = { isAccepted: true };
     wrapRequest({
       method: 'PUT',
@@ -157,7 +153,7 @@ const OffersView = ({
 
   const flowIfIsOwner = data.length ? (
     <Box display="flex" justifyContent="center">
-      {need.status !== 'in_progress' && (
+      {need?.status !== 'in_progress' && (
         <Box m="32px 32px 0px 32px">
           <Button
             color="green_light"
@@ -168,7 +164,7 @@ const OffersView = ({
           </Button>
         </Box>
       )}
-      {need.status === 'in_progress' && data[value].isAccepted && (
+      {need?.status === 'in_progress' && dataOffers[value]?.isAccepted && (
         <Box m="32px 32px 0px 32px" display="flex" justifyContent="center">
           <Box mr={2}>
             <Button
@@ -194,7 +190,7 @@ const OffersView = ({
             <Box>
               <Chat
                 needId={need.id}
-                offerId={data[value].id}
+                offerId={dataOffers[value].id}
                 refreshChat={refreshChat}
                 setRefreshChat={setRefreshChat}
               />
@@ -228,12 +224,12 @@ const OffersView = ({
   );
 
   useEffect(() => {
-    setDataOffers(data.slice(0, 5));
-  }, [data]);
+    setDataOffers(data.slice(paginOffers * 5, paginOffers * 5 + 5));
+  }, [data, paginOffers]);
 
   useEffect(() => {
     setValue(0);
-  }, [need.id]);
+  }, [need?.id]);
 
   return (
     <>
@@ -277,7 +273,7 @@ const OffersView = ({
           <Box>
             {dataOffers.map((item, ind) => (
               <TabPanel key={item.id} value={value} index={ind}>
-                {need.status === 'in_progress' && (
+                {need?.status === 'in_progress' && (
                   <Box mb={2}>
                     {item.isAccepted ? (
                       <Typography variant="font_14_roboto_green">

@@ -9,6 +9,7 @@ import {
 import {
   Dashboard,
   DashboardNeeds,
+  DashboardOffers,
   ErrorPage,
   Login,
   Needs,
@@ -55,6 +56,14 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <Dashboard />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/dashboard/offers',
+    element: (
+      <ProtectedRoute>
+        <DashboardOffers />
       </ProtectedRoute>
     ),
   },

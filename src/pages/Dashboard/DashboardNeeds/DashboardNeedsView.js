@@ -3,15 +3,15 @@ import React, {
   Fragment,
   useEffect,
   useReducer,
-  useRef,
+  useCallback,
 } from 'react';
-import { useNavigate } from 'react-router-dom';
 import {
   Grid,
   Stack,
   Box,
   Tabs,
   Tab,
+  TextField,
   Button,
   Modal,
   IconButton,
@@ -20,11 +20,6 @@ import {
 import { ArrowForwardIos, ArrowBackIos } from '@mui/icons-material';
 import { toast } from 'react-toastify';
 
-import {
-  CustomTitle,
-  CustomAbilityToPay,
-  CustomDescription,
-} from './CustomComponents';
 import Offers from 'pages/Offers';
 import { withLayout } from 'hocs';
 import { text, API } from 'helper/constants';
@@ -39,127 +34,116 @@ const DashboardNeedsView = ({ data, refreshNeed, setRefreshNeed }) => {
   const [dataNeeds, setDataNeeds] = useState(data.slice(0, 5));
   const [open, setOpen] = useState(false);
 
-  const reducerTitle = (state, action) => {
-    switch (action.type) {
-      case 'TITLE':
-        return { ...state, [value]: action.payload };
-      case 'TITLE_INITIAL':
-        return {
-          0: null,
-          1: null,
-          2: null,
-          3: null,
-          4: null,
-        };
-      default:
-        throw new Error();
-    }
-  };
-
-  const [updTitle, setUpdTitle] = useReducer(reducerTitle, {
+  const initialState = {
     0: null,
     1: null,
     2: null,
     3: null,
     4: null,
-  });
+  };
+
+  const reducerTitle = (state, action) => {
+    switch (action.type) {
+      case 'TITLE_UPDATE':
+        return { ...state, [value]: action.payload };
+      case 'TITLE_RESET':
+        return { ...state, [value]: action.payload };
+      case 'TITLE_INITIAL':
+        return { ...action.payload };
+      default:
+        throw new Error();
+    }
+  };
+
+  const [updTitle, setUpdTitle] = useReducer(reducerTitle, initialState);
 
   const reducerAbility = (state, action) => {
     switch (action.type) {
-      case 'ABILITY_TO_PAY':
+      case 'ABILITY_UPDATE':
+        return { ...state, [value]: action.payload };
+      case 'ABILITY_RESET':
         return { ...state, [value]: action.payload };
       case 'ABILITY_INITIAL':
-        return {
-          0: null,
-          1: null,
-          2: null,
-          3: null,
-          4: null,
-        };
+        return { ...action.payload };
       default:
         throw new Error();
     }
   };
 
-  const [updAbility, setUpdAbility] = useReducer(reducerAbility, {
-    0: null,
-    1: null,
-    2: null,
-    3: null,
-    4: null,
-  });
+  const [updAbility, setUpdAbility] = useReducer(reducerAbility, initialState);
 
   const reducerDescription = (state, action) => {
     switch (action.type) {
-      case 'DESCRIPTION':
+      case 'DESCRIPTION_UPDATE':
+        return { ...state, [value]: action.payload };
+      case 'DESCRIPTION_RESET':
         return { ...state, [value]: action.payload };
       case 'DESCRIPTION_INITIAL':
-        return {
-          0: null,
-          1: null,
-          2: null,
-          3: null,
-          4: null,
-        };
+        return { ...action.payload };
       default:
         throw new Error();
     }
   };
 
-  const [updDescription, setUpdDescription] = useReducer(reducerDescription, {
-    0: null,
-    1: null,
-    2: null,
-    3: null,
-    4: null,
-  });
+  const [updDescription, setUpdDescription] = useReducer(
+    reducerDescription,
+    initialState,
+  );
+
+  const initialErrors = {
+    0: { title: false, abilityToPay: false, description: false },
+    1: { title: false, abilityToPay: false, description: false },
+    2: { title: false, abilityToPay: false, description: false },
+    3: { title: false, abilityToPay: false, description: false },
+    4: { title: false, abilityToPay: false, description: false },
+  };
 
   const reducerError = (state, action) => {
     switch (action.type) {
       case 'TITLE_ERROR':
-        return { ...state, title: action.payload };
-      case 'ABILITY_TO_PAY_ERROR':
-        return { ...state, abilityToPay: action.payload };
-      case 'DESCRIPTION_ERROR':
-        return { ...state, description: action.payload };
-      case 'ALL_ERROR':
         return {
           ...state,
-          title: action.payload,
-          abilityToPay: action.payload,
-          description: action.payload,
+          [value]: { ...state[value], title: action.payload },
         };
+      case 'ABILITY_ERROR':
+        return {
+          ...state,
+          [value]: { ...state[value], abilityToPay: action.payload },
+        };
+      case 'DESCRIPTION_ERROR':
+        return {
+          ...state,
+          [value]: { ...state[value], description: action.payload },
+        };
+      case 'ERROR_RESET':
+        return initialErrors;
       default:
         throw new Error();
     }
   };
 
-  const [errors, dispatchError] = useReducer(reducerError, {
-    title: false,
-    abilityToPay: false,
-    description: false,
-  });
+  const [errors, dispatchError] = useReducer(reducerError, initialErrors);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const inputRefTitle = useRef(null);
-  const inputRefAbility = useRef(null);
-  const inputRefDescription = useRef(null);
-
-  const navigate = useNavigate();
-
   const paginDataForward = () => {
     if (data.length > 5) {
-      setDataNeeds(data.slice((paginNeeds + 1) * 5, (paginNeeds + 1) * 5 + 5));
       setPaginNeeds((s) => (s += 1));
+      setValue(0);
+      setUpdTitle({ type: 'TITLE_INITIAL', payload: initialState });
+      setUpdAbility({ type: 'ABILITY_INITIAL', payload: initialState });
+      setUpdDescription({ type: 'DESCRIPTION_INITIAL', payload: initialState });
     }
   };
 
   const paginDataBack = () => {
     if (data.length > 5) {
-      setDataNeeds(data.slice((paginNeeds - 1) * 5, (paginNeeds - 1) * 5 + 5));
       setPaginNeeds((s) => (s -= 1));
+      setValue(0);
+      setUpdTitle({ type: 'TITLE_INITIAL', payload: initialState });
+      setUpdAbility({ type: 'ABILITY_INITIAL', payload: initialState });
+      setUpdDescription({ type: 'DESCRIPTION_INITIAL', payload: initialState });
     }
   };
 
@@ -168,6 +152,9 @@ const DashboardNeedsView = ({ data, refreshNeed, setRefreshNeed }) => {
   const {
     pages: {
       needsDetails: {
+        TITLE,
+        ABILITY_TO_PAY,
+        DESCRIPTION,
         STATUS,
         SAVE,
         RESET,
@@ -175,11 +162,12 @@ const DashboardNeedsView = ({ data, refreshNeed, setRefreshNeed }) => {
         CONFIRMATION_DELETE,
         YES,
         NO,
+        NO_NEEDS,
       },
     },
   } = text;
 
-  const TabPanel = (props) => {
+  const TabPanel = useCallback((props) => {
     const { children, value, index, ...other } = props;
 
     return (
@@ -196,7 +184,7 @@ const DashboardNeedsView = ({ data, refreshNeed, setRefreshNeed }) => {
         {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
       </div>
     );
-  };
+  }, []);
 
   const handleChangeNeed = (event, newValue) => {
     setValue(newValue);
@@ -222,7 +210,7 @@ const DashboardNeedsView = ({ data, refreshNeed, setRefreshNeed }) => {
     }
   };
 
-  const handleDelete = (e, title) => {
+  const handleDelete = (title) => {
     wrapRequest({
       method: 'DELETE',
       url: `${API.URL}:${API.PORT}/needs/${dataNeeds[value].id}/delete`,
@@ -230,8 +218,6 @@ const DashboardNeedsView = ({ data, refreshNeed, setRefreshNeed }) => {
       cache: 'default',
     })
       .then(() => {
-        handleClose();
-        navigate(-1);
         toast.success(`Need - ${title} was successfully deleted`, {
           position: toast.POSITION.TOP_RIGHT,
         });
@@ -240,7 +226,10 @@ const DashboardNeedsView = ({ data, refreshNeed, setRefreshNeed }) => {
         toast.error(err, {
           position: toast.POSITION.TOP_RIGHT,
         }),
-      );
+      )
+      .finally(() => {
+        setRefreshNeed(!refreshNeed);
+      });
   };
 
   const handleSave = (e, title, abilityToPay, description) => {
@@ -264,37 +253,39 @@ const DashboardNeedsView = ({ data, refreshNeed, setRefreshNeed }) => {
             position: toast.POSITION.TOP_RIGHT,
           },
         );
-        navigate(-1);
       })
       .catch((err) =>
         toast.error(err, {
           position: toast.POSITION.TOP_RIGHT,
         }),
-      );
+      )
+      .finally(() => {
+        setRefreshNeed(!refreshNeed);
+      });
   };
 
   const handleReset = (e) => {
     e.stopPropagation();
-    setUpdTitle({ type: 'TITLE', payload: dataNeeds[value].title });
+    setUpdTitle({ type: 'TITLE_RESET', payload: dataNeeds[value].title });
     setUpdAbility({
-      type: 'ABILITY_TO_PAY',
+      type: 'ABILITY_RESET',
       payload: dataNeeds[value].ability_to_pay,
     });
     setUpdDescription({
-      type: 'DESCRIPTION',
+      type: 'DESCRIPTION_RESET',
       payload: dataNeeds[value].description,
     });
-    dispatchError({ type: 'ALL_ERROR', payload: false });
+    dispatchError({ type: 'ERROR_RESET' });
   };
 
   const handleUpdTitle = (e) => {
     e.stopPropagation();
     if (e.target.value) {
       dispatchError({ type: 'TITLE_ERROR', payload: false });
-      setUpdTitle({ type: 'TITLE', payload: e.target.value });
+      setUpdTitle({ type: 'TITLE_UPDATE', payload: e.target.value });
     } else if (e.target.value === '') {
       dispatchError({ type: 'TITLE_ERROR', payload: true });
-      setUpdTitle({ type: 'TITLE', payload: e.target.value });
+      setUpdTitle({ type: 'TITLE_UPDATE', payload: e.target.value });
     } else {
       dispatchError({ type: 'TITLE_ERROR', payload: true });
     }
@@ -303,13 +294,13 @@ const DashboardNeedsView = ({ data, refreshNeed, setRefreshNeed }) => {
   const handleUpdAbility = (e) => {
     e.stopPropagation();
     if (e.target.value && !isNaN(e.target.value)) {
-      dispatchError({ type: 'ABILITY_TO_PAY_ERROR', payload: false });
-      setUpdAbility({ type: 'ABILITY_TO_PAY', payload: e.target.value });
+      dispatchError({ type: 'ABILITY_ERROR', payload: false });
+      setUpdAbility({ type: 'ABILITY_UPDATE', payload: e.target.value });
     } else if (e.target.value === '') {
-      dispatchError({ type: 'ABILITY_TO_PAY_ERROR', payload: true });
-      setUpdAbility({ type: 'ABILITY_TO_PAY', payload: e.target.value });
+      dispatchError({ type: 'ABILITY_ERROR', payload: true });
+      setUpdAbility({ type: 'ABILITY_UPDATE', payload: e.target.value });
     } else {
-      dispatchError({ type: 'ABILITY_TO_PAY_ERROR', payload: true });
+      dispatchError({ type: 'ABILITY_ERROR', payload: true });
     }
   };
 
@@ -317,48 +308,24 @@ const DashboardNeedsView = ({ data, refreshNeed, setRefreshNeed }) => {
     e.stopPropagation();
     if (e.target.value !== '') {
       dispatchError({ type: 'DESCRIPTION_ERROR', payload: false });
-      setUpdDescription({ type: 'DESCRIPTION', payload: e.target.value });
+      setUpdDescription({
+        type: 'DESCRIPTION_UPDATE',
+        payload: e.target.value,
+      });
     } else if (e.target.value === '') {
       dispatchError({ type: 'DESCRIPTION_ERROR', payload: true });
-      setUpdDescription({ type: 'DESCRIPTION', payload: e.target.value });
+      setUpdDescription({
+        type: 'DESCRIPTION_UPDATE',
+        payload: e.target.value,
+      });
     } else {
       dispatchError({ type: 'DESCRIPTION_ERROR', payload: true });
     }
   };
 
   useEffect(() => {
-    inputRefTitle?.current?.focus();
-    inputRefTitle?.current?.setSelectionRange(
-      inputRefTitle?.current?.value.length,
-      inputRefTitle?.current?.value.length,
-    );
-  }, [updTitle[value]]);
-
-  useEffect(() => {
-    inputRefAbility?.current?.focus();
-    inputRefAbility?.current?.setSelectionRange(
-      inputRefAbility?.current?.value.length,
-      inputRefAbility?.current?.value.length,
-    );
-  }, [updAbility[value]]);
-
-  useEffect(() => {
-    inputRefDescription?.current?.focus();
-    inputRefDescription?.current?.setSelectionRange(
-      inputRefDescription?.current?.value.length,
-      inputRefDescription?.current?.value.length,
-    );
-  }, [updDescription[value]]);
-
-  useEffect(() => {
-    setUpdTitle({ type: 'TITLE_INITIAL' });
-    setUpdAbility({ type: 'ABILITY_INITIAL' });
-    setUpdDescription({ type: 'DESCRIPTION_INITIAL' });
-  }, [dataNeeds[0].id]);
-
-  useEffect(() => {
-    setDataNeeds(data.slice(0, 5));
-  }, [data]);
+    setDataNeeds(data.slice(paginNeeds * 5, paginNeeds * 5 + 5));
+  }, [data, paginNeeds]);
 
   return (
     <div className="wrapper-dashboard-needs-view">
@@ -431,17 +398,22 @@ const DashboardNeedsView = ({ data, refreshNeed, setRefreshNeed }) => {
                         >
                           {handleDate(item.createdAt)}
                         </Typography>
-                        <CustomTitle
-                          myRef={inputRefTitle}
-                          title={
+                        <TextField
+                          label={TITLE}
+                          size="small"
+                          value={
                             updTitle[value]
                               ? updTitle[value]
                               : updTitle[value] === ''
                               ? ''
                               : item.title
                           }
-                          handleUpdTitle={handleUpdTitle}
-                          errors={errors}
+                          onChange={handleUpdTitle}
+                          fullWidth
+                          error={errors[value].title}
+                          helperText={
+                            errors[value].title && 'Please fill out title'
+                          }
                         />
                         <Box
                           sx={{
@@ -481,17 +453,22 @@ const DashboardNeedsView = ({ data, refreshNeed, setRefreshNeed }) => {
                             borderRadius: 1,
                           }}
                         >
-                          <CustomAbilityToPay
-                            myRef={inputRefAbility}
-                            abilityToPay={
+                          <TextField
+                            label={ABILITY_TO_PAY}
+                            size="small"
+                            value={
                               updAbility[value]
                                 ? updAbility[value]
                                 : updAbility[value] === ''
                                 ? ''
                                 : item.ability_to_pay
                             }
-                            handleUpdAbility={handleUpdAbility}
-                            errors={errors}
+                            onChange={handleUpdAbility}
+                            fullWidth
+                            error={errors[value].abilityToPay}
+                            helperText={
+                              errors[value].abilityToPay && 'Please type number'
+                            }
                           />
                         </Box>
                       </Grid>
@@ -503,17 +480,25 @@ const DashboardNeedsView = ({ data, refreshNeed, setRefreshNeed }) => {
                         display="flex"
                         justifyContent="flex-start"
                       >
-                        <CustomDescription
-                          myRef={inputRefDescription}
-                          description={
+                        <TextField
+                          id="outlined-multiline-static"
+                          label={DESCRIPTION}
+                          fullWidth
+                          multiline
+                          rows={5}
+                          value={
                             updDescription[value]
                               ? updDescription[value]
                               : updDescription[value] === ''
                               ? ''
                               : item.description
                           }
-                          handleUpdDescription={handleUpdDescription}
-                          errors={errors}
+                          onChange={handleUpdDescription}
+                          error={errors[value].description}
+                          helperText={
+                            errors[value].description &&
+                            'Please fill out description'
+                          }
                         />
                       </Grid>
                       <Grid item xs={1} sm={1} />
@@ -558,9 +543,11 @@ const DashboardNeedsView = ({ data, refreshNeed, setRefreshNeed }) => {
                                       style={{
                                         width: '100px',
                                       }}
-                                      onClick={(e) =>
-                                        handleDelete(e, item.title)
-                                      }
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleClose();
+                                        handleDelete(item.title);
+                                      }}
                                     >
                                       {YES}
                                     </Button>
@@ -626,6 +613,15 @@ const DashboardNeedsView = ({ data, refreshNeed, setRefreshNeed }) => {
                     </Box>
                   </TabPanel>
                 ))}
+                {!dataNeeds.length && (
+                  <Box
+                    sx={{
+                      textAlign: 'center',
+                    }}
+                  >
+                    <Typography variant="font_14_roboto">{NO_NEEDS}</Typography>
+                  </Box>
+                )}
               </Box>
             </Box>
           </Stack>

@@ -73,6 +73,7 @@ const NeedsScreen = (props) => {
       cache: 'default',
     })
       .then(({ data: { needs, totalItems, totalPages } }) => {
+        needs.sort((a, b) => a.id - b.id);
         setData(needs);
         setTotalItems(totalItems);
         setTotalPages(totalPages);

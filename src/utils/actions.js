@@ -5,6 +5,11 @@ const actions = (name, payload) => {
         type: 'SAVE_USER_ID',
         payload,
       };
+    case 'saveUser':
+      return {
+        type: 'SAVE_USER',
+        payload,
+      };
     case 'saveActiveLink':
       return {
         type: 'SAVE_ACTIVE_LINK',
