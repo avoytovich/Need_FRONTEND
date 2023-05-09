@@ -15,26 +15,33 @@ const OffersScreen = ({ isOwnerNeed, need, refreshNeed, setRefreshNeed }) => {
   const { id } = useParams();
 
   useEffect(() => {
-    let url = `${API.URL}:${API.PORT}/offers-to-need?needId=${id || need.id}`;
-    wrapRequest({
-      method: 'GET',
-      url,
-      mode: 'cors',
-      cache: 'default',
-    })
-      .then(({ data }) => {
-        data.sort((a, b) => a.id - b.id);
-        setData(data);
+    if (id || need?.id) {
+      let url = `${API.URL}:${API.PORT}/offers-to-need?needId=${
+        id || need?.id
+      }`;
+      wrapRequest({
+        method: 'GET',
+        url,
+        mode: 'cors',
+        cache: 'default',
       })
-      .catch((err) =>
-        toast.error(err, {
-          position: toast.POSITION.TOP_RIGHT,
-        }),
-      )
-      .finally(() => {
-        setLoading(false);
-      });
-  }, [id, need.id, refreshOffer]);
+        .then(({ data }) => {
+          data.sort((a, b) => a.id - b.id);
+          setData(data);
+        })
+        .catch((err) =>
+          toast.error(err, {
+            position: toast.POSITION.TOP_RIGHT,
+          }),
+        )
+        .finally(() => {
+          setLoading(false);
+        });
+    } else {
+      setData([]);
+      setLoading(false);
+    }
+  }, [id, need?.id, refreshOffer]);
 
   if (loading) {
     return <Loader />;

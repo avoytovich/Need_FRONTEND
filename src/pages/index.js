@@ -1,6 +1,7 @@
 import Login from './Login';
 import Dashboard from './Dashboard';
 import DashboardNeeds from './Dashboard/DashboardNeeds';
+import DashboardOffers from './Dashboard/DashboardOffers';
 import Needs from './Needs';
 import NeedDetails from './Needs/NeedDetails';
 import AdminPanel from './AdminPanel';
@@ -11,6 +12,7 @@ export {
   Login,
   Dashboard,
   DashboardNeeds,
+  DashboardOffers,
   Needs,
   NeedDetails,
   AdminPanel,
