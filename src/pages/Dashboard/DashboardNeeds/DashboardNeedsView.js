@@ -4,6 +4,7 @@ import React, {
   useEffect,
   useReducer,
   useCallback,
+  useMemo,
 } from 'react';
 import {
   Grid,
@@ -31,8 +32,12 @@ import './dashboard_need.sass';
 const DashboardNeedsView = ({ data, refreshNeed, setRefreshNeed }) => {
   const [value, setValue] = useState(0);
   const [paginNeeds, setPaginNeeds] = useState(0);
-  const [dataNeeds, setDataNeeds] = useState(data.slice(0, 5));
   const [open, setOpen] = useState(false);
+
+  const dataNeeds = useMemo(
+    () => data.slice(paginNeeds * 5, paginNeeds * 5 + 5),
+    [data, paginNeeds],
+  );
 
   const initialState = {
     0: null,
@@ -218,6 +223,7 @@ const DashboardNeedsView = ({ data, refreshNeed, setRefreshNeed }) => {
       cache: 'default',
     })
       .then(() => {
+        setValue((v) => (v ? v - 1 : 0));
         toast.success(`Need - ${title} was successfully deleted`, {
           position: toast.POSITION.TOP_RIGHT,
         });
@@ -324,8 +330,10 @@ const DashboardNeedsView = ({ data, refreshNeed, setRefreshNeed }) => {
   };
 
   useEffect(() => {
-    setDataNeeds(data.slice(paginNeeds * 5, paginNeeds * 5 + 5));
-  }, [data, paginNeeds]);
+    if (!dataNeeds.length) {
+      setPaginNeeds((s) => (s ? s - 1 : 0));
+    }
+  }, [dataNeeds]);
 
   return (
     <div className="wrapper-dashboard-needs-view">
@@ -401,6 +409,7 @@ const DashboardNeedsView = ({ data, refreshNeed, setRefreshNeed }) => {
                         <TextField
                           label={TITLE}
                           size="small"
+                          disabled={item.status === 'in_progress'}
                           value={
                             updTitle[value]
                               ? updTitle[value]
@@ -456,6 +465,7 @@ const DashboardNeedsView = ({ data, refreshNeed, setRefreshNeed }) => {
                           <TextField
                             label={ABILITY_TO_PAY}
                             size="small"
+                            disabled={item.status === 'in_progress'}
                             value={
                               updAbility[value]
                                 ? updAbility[value]
@@ -483,6 +493,7 @@ const DashboardNeedsView = ({ data, refreshNeed, setRefreshNeed }) => {
                         <TextField
                           id="outlined-multiline-static"
                           label={DESCRIPTION}
+                          disabled={item.status === 'in_progress'}
                           fullWidth
                           multiline
                           rows={5}
@@ -590,7 +601,8 @@ const DashboardNeedsView = ({ data, refreshNeed, setRefreshNeed }) => {
                               disabled={
                                 errors.title ||
                                 errors.abilityToPay ||
-                                errors.description
+                                errors.description ||
+                                item.status === 'in_progress'
                               }
                             >
                               {SAVE}

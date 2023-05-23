@@ -210,7 +210,7 @@ const NeedDetailsView = ({
               size="small"
               value={updTitle}
               onChange={handleTitle}
-              disabled={owner_id !== currentUserId}
+              disabled={owner_id !== currentUserId || status === 'in_progress'}
               fullWidth
               error={errors.title}
               helperText={errors.title && 'Please fill out title'}
@@ -256,7 +256,9 @@ const NeedDetailsView = ({
                 size="small"
                 value={updAbility}
                 onChange={handleAbility}
-                disabled={owner_id !== currentUserId}
+                disabled={
+                  owner_id !== currentUserId || status === 'in_progress'
+                }
                 fullWidth
                 error={errors.abilityToPay}
                 helperText={errors.abilityToPay && 'Please type number'}
@@ -279,7 +281,7 @@ const NeedDetailsView = ({
             <TextField
               id="outlined-multiline-static"
               label={DESCRIPTION}
-              disabled={owner_id !== currentUserId}
+              disabled={owner_id !== currentUserId || status === 'in_progress'}
               fullWidth
               multiline
               rows={5}
@@ -364,7 +366,10 @@ const NeedDetailsView = ({
                   }}
                   onClick={handleSave}
                   disabled={
-                    errors.title || errors.abilityToPay || errors.description
+                    errors.title ||
+                    errors.abilityToPay ||
+                    errors.description ||
+                    status === 'in_progress'
                   }
                 >
                   {SAVE}
