@@ -47,12 +47,16 @@ const NeedAddView = ({
     }
   };
 
-  const handleAbilityToPay = (value) => {
-    setAbilityToPay(value);
-    if (!value) {
-      dispatchError({ type: 'ABILITY_TO_PAY', payload: true });
-    } else {
+  const handleAbilityToPay = (e) => {
+    e.stopPropagation();
+    if (e.target.value && !isNaN(e.target.value)) {
       dispatchError({ type: 'ABILITY_TO_PAY', payload: false });
+      setAbilityToPay(e.target.value);
+    } else if (e.target.value === '') {
+      dispatchError({ type: 'ABILITY_TO_PAY', payload: true });
+      setAbilityToPay(e.target.value);
+    } else {
+      dispatchError({ type: 'ABILITY_TO_PAY', payload: true });
     }
   };
 
@@ -124,12 +128,6 @@ const NeedAddView = ({
           <TextField
             placeholder="type title"
             size="small"
-            inputProps={{
-              type: 'text',
-              style: {
-                color: colors['blue-light'],
-              },
-            }}
             value={title}
             onChange={(e) => handleTitle(e.target.value)}
             style={{
@@ -151,14 +149,8 @@ const NeedAddView = ({
           <TextField
             placeholder={PROPOSE_TO_PAY_MESSAGE}
             size="small"
-            inputProps={{
-              type: 'number',
-              style: {
-                color: colors['blue-light'],
-              },
-            }}
             value={abilityToPay}
-            onChange={(e) => handleAbilityToPay(e.target.value)}
+            onChange={(e) => handleAbilityToPay(e)}
             style={{
               margin: '10px',
               borderRadius: '5px',
@@ -166,7 +158,7 @@ const NeedAddView = ({
             }}
             fullWidth
             error={errors.abilityToPay}
-            helperText={errors.abilityToPay && 'Please fill out this field'}
+            helperText={errors.abilityToPay && 'Please type number'}
           />
         </Box>
         <Box

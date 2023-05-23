@@ -1,4 +1,4 @@
-import React, { useState, Fragment, useEffect } from 'react';
+import React, { useState, Fragment, useEffect, useMemo } from 'react';
 import { toast } from 'react-toastify';
 
 import {
@@ -34,8 +34,12 @@ const OffersView = ({
   const [value, setValue] = useState(0);
   const [open, setOpen] = useState(false);
   const [paginOffers, setPaginOffers] = useState(0);
-  const [dataOffers, setDataOffers] = useState([]);
   const [refreshChat, setRefreshChat] = useState(false);
+
+  const dataOffers = useMemo(
+    () => data.slice(paginOffers * 5, paginOffers * 5 + 5),
+    [data, paginOffers],
+  );
 
   const {
     pages: {
@@ -224,10 +228,6 @@ const OffersView = ({
   );
 
   useEffect(() => {
-    setDataOffers(data.slice(paginOffers * 5, paginOffers * 5 + 5));
-  }, [data, paginOffers]);
-
-  useEffect(() => {
     setValue(0);
   }, [need?.id]);
 
@@ -293,6 +293,7 @@ const OffersView = ({
                   fullWidth
                   rows={3}
                   defaultValue={item.description}
+                  disabled={isOwnerNeed}
                 />
                 {flowIfIsOwner}
               </TabPanel>

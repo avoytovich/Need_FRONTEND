@@ -4,6 +4,7 @@ import React, {
   useEffect,
   Fragment,
   useCallback,
+  useMemo,
 } from 'react';
 import { toast } from 'react-toastify';
 import {
@@ -29,10 +30,14 @@ const DashboardOffersView = ({ data, refreshOffer, setRefreshOffer }) => {
   // console.log('data', data);
 
   const [value, setValue] = useState(0);
-  const [dataOffers, setDataOffers] = useState([]);
   const [paginOffers, setPaginOffers] = useState(0);
   const [modalContent, setModalContent] = useState(null);
   const [open, setOpen] = useState(false);
+
+  const dataOffers = useMemo(
+    () => data.slice(paginOffers * 5, paginOffers * 5 + 5),
+    [data, paginOffers],
+  );
 
   const initialState = {
     0: null,
@@ -285,8 +290,10 @@ const DashboardOffersView = ({ data, refreshOffer, setRefreshOffer }) => {
   );
 
   useEffect(() => {
-    setDataOffers(data.slice(paginOffers * 5, paginOffers * 5 + 5));
-  }, [data, paginOffers]);
+    if (!dataOffers.length) {
+      setPaginOffers((s) => (s ? s - 1 : 0));
+    }
+  }, [dataOffers]);
 
   return (
     <Stack
@@ -350,6 +357,7 @@ const DashboardOffersView = ({ data, refreshOffer, setRefreshOffer }) => {
                 <TextField
                   id="outlined-multiline-static"
                   label={DESCRIPTION}
+                  disabled={item.isAccepted}
                   multiline
                   fullWidth
                   rows={3}
@@ -371,6 +379,7 @@ const DashboardOffersView = ({ data, refreshOffer, setRefreshOffer }) => {
                     <Button
                       color="blue_light"
                       variant="contained"
+                      disabled={item.isAccepted}
                       onClick={handleSave}
                     >
                       {SAVE}

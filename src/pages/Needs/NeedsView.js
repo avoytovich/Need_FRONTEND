@@ -142,8 +142,12 @@ const NeedsView = ({
     if (store.prevPage) {
       setPage(store.prevPage);
       dispatchPrevPage('prevPage', null);
+    } else {
+      if (!data.length) {
+        setPage((p) => p - 1);
+      }
     }
-  }, []);
+  }, [data]);
 
   return (
     <div className="wrapper-needs">
@@ -248,6 +252,9 @@ const NeedsView = ({
               <Box
                 key={id}
                 sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
                   flex: '0 0 29%',
                   justifyContent: 'center',
                   margin: '10px',
@@ -260,8 +267,10 @@ const NeedsView = ({
                 }}
               >
                 <Box
+                  className="need-title"
                   sx={{
                     marginTop: '10px',
+                    width: '150px',
                     textAlign: 'center',
                   }}
                 >

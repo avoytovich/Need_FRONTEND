@@ -58,6 +58,8 @@ const Header = (props) => {
       props.dispatchActiveLink('saveActiveLink', 'DASHBOARD');
     } else if (location.pathname.startsWith('/profile')) {
       props.dispatchActiveLink('saveActiveLink', 'PROFILE');
+    } else if (location.pathname.startsWith('/admin')) {
+      props.dispatchActiveLink('saveActiveLink', 'ADMIN');
     } else {
       props.dispatchActiveLink('saveActiveLink', null);
     }
