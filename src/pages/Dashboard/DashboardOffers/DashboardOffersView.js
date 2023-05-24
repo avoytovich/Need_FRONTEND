@@ -23,6 +23,7 @@ import { ArrowForwardIos, ArrowBackIos } from '@mui/icons-material';
 import { withLayout } from 'hocs';
 import { text, API } from 'helper/constants';
 import { wrapRequest } from 'utils/api';
+import Chat from 'pages/Chat';
 
 import colors from 'helper/colors.sass';
 
@@ -276,17 +277,11 @@ const DashboardOffersView = ({ data, refreshOffer, setRefreshOffer }) => {
   );
 
   const chatModal = (
-    <Box className="modal-create">
-      <Box textAlign="center">
-        <Typography>CHAT</Typography>
-      </Box>
-      {/* <Chat
-          needId={need.id}
-          offerId={data[value].id}
-          refreshChat={refreshChat}
-          setRefreshChat={setRefreshChat}
-        /> */}
-    </Box>
+    <Chat
+      owner="offerOwner"
+      needId={dataOffers[value].need_id}
+      offerId={dataOffers[value].id}
+    />
   );
 
   useEffect(() => {

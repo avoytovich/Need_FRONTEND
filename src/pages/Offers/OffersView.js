@@ -34,7 +34,6 @@ const OffersView = ({
   const [value, setValue] = useState(0);
   const [open, setOpen] = useState(false);
   const [paginOffers, setPaginOffers] = useState(0);
-  const [refreshChat, setRefreshChat] = useState(false);
 
   const dataOffers = useMemo(
     () => data.slice(paginOffers * 5, paginOffers * 5 + 5),
@@ -193,10 +192,9 @@ const OffersView = ({
           >
             <Box>
               <Chat
+                owner="needOwner"
                 needId={need.id}
                 offerId={dataOffers[value].id}
-                refreshChat={refreshChat}
-                setRefreshChat={setRefreshChat}
               />
             </Box>
           </Modal>
