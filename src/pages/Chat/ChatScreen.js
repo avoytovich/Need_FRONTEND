@@ -7,9 +7,10 @@ import { Loader } from 'components';
 
 import ChatView from './ChatView';
 
-const ChatScreen = ({ needId, offerId, refreshChat, setRefreshChat }) => {
+const ChatScreen = ({ owner, needId, offerId }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [refreshChat, setRefreshChat] = useState(false);
 
   useEffect(() => {
     let url = `${API.URL}:${API.PORT}/chat?needId=${needId}&offerId=${offerId}`;
@@ -30,7 +31,7 @@ const ChatScreen = ({ needId, offerId, refreshChat, setRefreshChat }) => {
       .finally(() => {
         setLoading(false);
       });
-  }, [needId, offerId]);
+  }, [needId, offerId, refreshChat]);
 
   if (loading) {
     return <Loader />;
@@ -38,6 +39,7 @@ const ChatScreen = ({ needId, offerId, refreshChat, setRefreshChat }) => {
 
   return (
     <ChatView
+      owner={owner}
       needId={needId}
       offerId={offerId}
       data={data}

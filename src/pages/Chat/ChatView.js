@@ -7,7 +7,14 @@ import { wrapRequest } from 'utils/api';
 
 import colors from 'helper/colors.sass';
 
-const ChatView = ({ needId, offerId, data, refreshChat, setRefreshChat }) => {
+const ChatView = ({
+  owner,
+  needId,
+  offerId,
+  data,
+  refreshChat,
+  setRefreshChat,
+}) => {
   // console.log('data', data);
   const [message, setMessage] = useState('');
 
@@ -24,11 +31,11 @@ const ChatView = ({ needId, offerId, data, refreshChat, setRefreshChat }) => {
     let payload;
     if (data.chat) {
       payload = {
-        messeges: [...data.chat.messeges, `needOwner: ${message}`],
+        messeges: [...data.chat.messeges, `${owner}: ${message}`],
       };
     } else {
       payload = {
-        messeges: [`needOwner: ${message}`],
+        messeges: [`${owner}: ${message}`],
       };
     }
     wrapRequest({
