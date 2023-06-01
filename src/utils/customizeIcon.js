@@ -1,7 +1,6 @@
 import React from 'react';
 
-const customizeIcon = props => {
-  
+const customizeIcon = (props) => {
   // console.log('props customizeIcon', props);
   const { className, source } = props;
 
@@ -12,7 +11,7 @@ const customizeIcon = props => {
       className={className}
       style={{
         backgroundImage: resolvePath(),
-        ...props
+        ...props,
       }}
     >
       {props.children}

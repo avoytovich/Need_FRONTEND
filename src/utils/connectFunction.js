@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext } from 'react';
 
 import Context from './context';
 
@@ -8,10 +8,10 @@ const connect = (mapStateToProps, mapDispatchToProps) => {
       const { dispatch, store } = useContext(Context);
       const stateToProps = mapStateToProps(store);
       const dispatchToProps = mapDispatchToProps(dispatch);
-      const props = {...initialProps, ...stateToProps, ...dispatchToProps};
-      return (<Component {... props} />);
-    }
-  }
+      const props = { ...initialProps, ...stateToProps, ...dispatchToProps };
+      return <Component {...props} />;
+    };
+  };
 };
 
 export default connect;
