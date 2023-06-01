@@ -103,7 +103,9 @@ const OffersView = ({
   };
 
   const handleRejection = (e) => {
-    let url = `${API.URL}:${API.PORT}/offer/${dataOffers[value].id}/accept_reject`;
+    let url = `${API.URL[process.env.NODE_ENV]}/offer/${
+      dataOffers[value].id
+    }/accept_reject`;
     const payload = { isAccepted: false };
     wrapRequest({
       method: 'PUT',
@@ -129,7 +131,9 @@ const OffersView = ({
   };
 
   const handleAcception = (e) => {
-    let url = `${API.URL}:${API.PORT}/offer/${dataOffers[value].id}/accept_reject`;
+    let url = `${API.URL[process.env.NODE_ENV]}/offer/${
+      dataOffers[value].id
+    }/accept_reject`;
     const payload = { isAccepted: true };
     wrapRequest({
       method: 'PUT',

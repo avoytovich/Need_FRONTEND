@@ -15,7 +15,7 @@ const DashboardNeedsScreen = ({ store: { userId } }) => {
   const [refreshNeed, setRefreshNeed] = useState(false);
 
   useEffect(() => {
-    let url = `${API.URL}:${API.PORT}/needs-all/${userId}`;
+    let url = `${API.URL[process.env.NODE_ENV]}/needs-all/${userId}`;
     wrapRequest({
       method: 'GET',
       url,

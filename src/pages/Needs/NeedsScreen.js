@@ -35,7 +35,7 @@ const NeedsScreen = (props) => {
   }, [actual, noActual, inProgress]);
 
   useEffect(() => {
-    let url = `${API.URL}:${API.PORT}/needs-all`;
+    let url = `${API.URL[process.env.NODE_ENV]}/needs-all`;
     wrapRequest({
       method: 'GET',
       url,
@@ -53,7 +53,7 @@ const NeedsScreen = (props) => {
   }, []);
 
   useEffect(() => {
-    let url = `${API.URL}:${API.PORT}/needs?page=${
+    let url = `${API.URL[process.env.NODE_ENV]}/needs?page=${
       page - 1
     }&size=${PER_PAGE}&title=${search}`;
 
