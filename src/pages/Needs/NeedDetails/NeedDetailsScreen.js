@@ -17,7 +17,7 @@ const NeedDetailsScreen = ({ store: { userId } }) => {
   const { id } = useParams();
 
   useEffect(() => {
-    let url = `${API.URL}:${API.PORT}/needs/${id}`;
+    let url = `${API.URL[process.env.NODE_ENV]}/needs/${id}`;
     wrapRequest({
       method: 'GET',
       url,

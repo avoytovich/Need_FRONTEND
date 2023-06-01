@@ -91,7 +91,7 @@ const NeedAddView = ({
 
     await wrapRequest({
       method: 'POST',
-      url: `${API.URL}:${API.PORT}/needs/create`,
+      url: `${API.URL[process.env.NODE_ENV]}/needs/create`,
       mode: 'cors',
       cache: 'default',
       data: payload,

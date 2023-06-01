@@ -64,7 +64,7 @@ const Login = (props) => {
     };
     wrapRequest({
       method: 'POST',
-      url: `${API.URL}:${API.PORT}/login`,
+      url: `${API.URL[process.env.NODE_ENV]}/login`,
       mode: 'cors',
       cache: 'default',
       data: payload,

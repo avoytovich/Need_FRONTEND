@@ -182,7 +182,9 @@ const DashboardOffersView = ({ data, refreshOffer, setRefreshOffer }) => {
     };
     wrapRequest({
       method: 'PUT',
-      url: `${API.URL}:${API.PORT}/offer/${dataOffers[value].id}/update`,
+      url: `${API.URL[process.env.NODE_ENV]}/offer/${
+        dataOffers[value].id
+      }/update`,
       mode: 'cors',
       cache: 'default',
       data: payload,
@@ -214,7 +216,9 @@ const DashboardOffersView = ({ data, refreshOffer, setRefreshOffer }) => {
   const handleDelete = () => {
     wrapRequest({
       method: 'DELETE',
-      url: `${API.URL}:${API.PORT}/offer/${dataOffers[value].id}/delete`,
+      url: `${API.URL[process.env.NODE_ENV]}/offer/${
+        dataOffers[value].id
+      }/delete`,
       mode: 'cors',
       cache: 'default',
     })

@@ -97,7 +97,7 @@ const NeedDetailsView = ({
   const handleDelete = () => {
     wrapRequest({
       method: 'DELETE',
-      url: `${API.URL}:${API.PORT}/needs/${id}/delete`,
+      url: `${API.URL[process.env.NODE_ENV]}/needs/${id}/delete`,
       mode: 'cors',
       cache: 'default',
     })
@@ -124,7 +124,7 @@ const NeedDetailsView = ({
     };
     wrapRequest({
       method: 'PUT',
-      url: `${API.URL}:${API.PORT}/needs/${id}/update`,
+      url: `${API.URL[process.env.NODE_ENV]}/needs/${id}/update`,
       mode: 'cors',
       cache: 'default',
       data: payload,

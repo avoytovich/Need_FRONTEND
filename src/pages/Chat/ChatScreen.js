@@ -13,7 +13,9 @@ const ChatScreen = ({ owner, needId, offerId }) => {
   const [refreshChat, setRefreshChat] = useState(false);
 
   useEffect(() => {
-    let url = `${API.URL}:${API.PORT}/chat?needId=${needId}&offerId=${offerId}`;
+    let url = `${
+      API.URL[process.env.NODE_ENV]
+    }/chat?needId=${needId}&offerId=${offerId}`;
     wrapRequest({
       method: 'GET',
       url,

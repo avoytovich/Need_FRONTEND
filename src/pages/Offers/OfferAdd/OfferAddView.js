@@ -43,7 +43,7 @@ const OfferAddView = ({
     };
     await wrapRequest({
       method: 'POST',
-      url: `${API.URL}:${API.PORT}/offer/create?needId=${id}`,
+      url: `${API.URL[process.env.NODE_ENV]}/offer/create?needId=${id}`,
       mode: 'cors',
       cache: 'default',
       data: payload,

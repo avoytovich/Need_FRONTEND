@@ -13,7 +13,7 @@ const DashboardOffersScreen = (props) => {
   const [refreshOffer, setRefreshOffer] = useState(false);
 
   useEffect(() => {
-    let url = `${API.URL}:${API.PORT}/offers-to-user`;
+    let url = `${API.URL[process.env.NODE_ENV]}/offers-to-user`;
     wrapRequest({
       method: 'GET',
       url,

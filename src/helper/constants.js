@@ -1,6 +1,8 @@
 const API = {
-  URL: 'http://localhost',
-  PORT: 8033,
+  URL: {
+    development: 'http://localhost:8033',
+    production: 'https://bookmark-back-end.herokuapp.com',
+  },
 };
 
 const PER_PAGE = 9;

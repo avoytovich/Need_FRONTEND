@@ -27,7 +27,9 @@ const ChatView = ({
   const handleMessage = (e) => setMessage(e.target.value);
 
   const handleSendMessage = () => {
-    let url = `${API.URL}:${API.PORT}/chat/create_update?needId=${needId}&offerId=${offerId}`;
+    let url = `${
+      API.URL[process.env.NODE_ENV]
+    }/chat/create_update?needId=${needId}&offerId=${offerId}`;
     let payload;
     if (data.chat) {
       payload = {

@@ -18,7 +18,7 @@ const AdminPanelScreen = ({ store: { userId } }) => {
   useEffect(() => {
     wrapRequest({
       method: 'GET',
-      url: `${API.URL}:${API.PORT}/user/${userId}/user_list`,
+      url: `${API.URL[process.env.NODE_ENV]}/user/${userId}/user_list`,
       mode: 'cors',
       cache: 'default',
     })
@@ -43,7 +43,7 @@ const AdminPanelScreen = ({ store: { userId } }) => {
   const acceptActivation = (activateUser_id) => {
     wrapRequest({
       method: 'POST',
-      url: `${API.URL}:${API.PORT}/user/${userId}/user_activate`,
+      url: `${API.URL[process.env.NODE_ENV]}/user/${userId}/user_activate`,
       data: { id: activateUser_id },
       mode: 'cors',
       cache: 'default',
@@ -64,7 +64,7 @@ const AdminPanelScreen = ({ store: { userId } }) => {
   const declineActivation = (activateUser_id) => {
     wrapRequest({
       method: 'POST',
-      url: `${API.URL}:${API.PORT}/user/${userId}/user_deactivate`,
+      url: `${API.URL[process.env.NODE_ENV]}/user/${userId}/user_deactivate`,
       data: { id: activateUser_id },
       mode: 'cors',
       cache: 'default',
@@ -85,7 +85,7 @@ const AdminPanelScreen = ({ store: { userId } }) => {
   const deleteUser = (activateUser_id) => {
     wrapRequest({
       method: 'DELETE',
-      url: `${API.URL}:${API.PORT}/user/${userId}/user_delete`,
+      url: `${API.URL[process.env.NODE_ENV]}/user/${userId}/user_delete`,
       data: { id: activateUser_id },
       mode: 'cors',
       cache: 'default',

@@ -71,7 +71,7 @@ const Header = (props) => {
     } else {
       wrapRequest({
         method: 'GET',
-        url: `${API.URL}:${API.PORT}/user/${props.store.userId}`,
+        url: `${API.URL[process.env.NODE_ENV]}/user/${props.store.userId}`,
         mode: 'cors',
         cache: 'default',
       })

@@ -16,7 +16,7 @@ const OffersScreen = ({ isOwnerNeed, need, refreshNeed, setRefreshNeed }) => {
 
   useEffect(() => {
     if (id || need?.id) {
-      let url = `${API.URL}:${API.PORT}/offers-to-need?needId=${
+      let url = `${API.URL[process.env.NODE_ENV]}/offers-to-need?needId=${
         id || need?.id
       }`;
       wrapRequest({

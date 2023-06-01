@@ -218,7 +218,9 @@ const DashboardNeedsView = ({ data, refreshNeed, setRefreshNeed }) => {
   const handleDelete = (title) => {
     wrapRequest({
       method: 'DELETE',
-      url: `${API.URL}:${API.PORT}/needs/${dataNeeds[value].id}/delete`,
+      url: `${API.URL[process.env.NODE_ENV]}/needs/${
+        dataNeeds[value].id
+      }/delete`,
       mode: 'cors',
       cache: 'default',
     })
@@ -247,7 +249,9 @@ const DashboardNeedsView = ({ data, refreshNeed, setRefreshNeed }) => {
     };
     wrapRequest({
       method: 'PUT',
-      url: `${API.URL}:${API.PORT}/needs/${dataNeeds[value].id}/update`,
+      url: `${API.URL[process.env.NODE_ENV]}/needs/${
+        dataNeeds[value].id
+      }/update`,
       mode: 'cors',
       cache: 'default',
       data: payload,
