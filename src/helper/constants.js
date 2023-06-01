@@ -1,7 +1,7 @@
 const API = {
   URL: {
     development: 'http://localhost:8033',
-    production: 'https://bookmark-back-end.herokuapp.com',
+    production: 'https://need-offer-backend.herokuapp.com',
   },
 };
 
