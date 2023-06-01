@@ -10,7 +10,7 @@ import { API, text } from 'helper/constants';
 import { wrapRequest } from 'utils/api';
 import CustomizeIcon from 'utils/customizeIcon';
 
-import paddington from 'assets/images/paddington.svg';
+import logo from 'assets/images/logo.svg';
 
 import colors from 'helper/colors.sass';
 import './login.sass';
@@ -102,7 +102,7 @@ const Login = (props) => {
         className="container-landing-login"
       >
         <Grid item xs={6} sm={6}>
-          <CustomizeIcon className="login-image" source={paddington} />
+          <CustomizeIcon className="login-image" source={logo} />
         </Grid>
         <Grid item xs={6} sm={6}>
           <div className="landing-login">
