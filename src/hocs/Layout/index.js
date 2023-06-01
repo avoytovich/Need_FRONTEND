@@ -1,22 +1,21 @@
 import React from 'react';
 
-import { Header, Footer } from './../../components';
+import { Header, Footer } from 'components';
 
 import './layout.sass';
 
 const withLayout = (Component) => {
-
-  return props => {
+  return (props) => {
     return (
       <React.Fragment>
-        <Header ofComponent={Component.name}/>
         <div className="container-layout">
+          <Header />
           <Component {...props} />
+          <Footer />
         </div>
-        <Footer />
       </React.Fragment>
-    )
-  }
+    );
+  };
 };
 
 export default withLayout;

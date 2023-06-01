@@ -1,36 +1,26 @@
-const links = (ofComponent) => ({
-  withAuth: [
+const links = {
+  withoutAdmin: [
     {
       id: 1,
-      title: 'HOME',
-      route: '/',
-    },
-    {
-      id: 2,
       title: 'DASHBOARD',
       route: '/dashboard',
     },
     {
-      id: 3,
+      id: 2,
       title: 'NEEDS',
       route: '/needs',
     },
     {
-      id: 4,
+      id: 3,
       title: 'PROFILE',
       route: '/profile',
     },
-    {
-      id: 5,
-      title: ofComponent === "Login" ? null : 'Log In / Sign Up',
-      route: ofComponent === "Login" ? null : '/login',
-    }
   ],
-  withoutAuth: [
+  withAdmin: [
     {
       id: 1,
-      title: 'HOME',
-      route: '/',
+      title: 'DASHBOARD',
+      route: '/dashboard',
     },
     {
       id: 2,
@@ -39,12 +29,15 @@ const links = (ofComponent) => ({
     },
     {
       id: 3,
-      title: ofComponent === "Login" ? null : 'Log In / Sign Up',
-      route: ofComponent === "Login" ? null : '/login',
-    }
+      title: 'PROFILE',
+      route: '/profile',
+    },
+    {
+      id: 4,
+      title: 'ADMIN',
+      route: '/admin',
+    },
   ],
-});
+};
 
-export {
-  links,
-}
+export { links };

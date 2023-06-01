@@ -1,19 +1,15 @@
+@import './../../helper/colors'
+
 html
   scroll-behavior: smooth
 body
   margin: 0px
 .wrapper-header
-  position: fixed
-  left: 0
-  top: 0
-  right: 0
   display: flex
   justify-content: center
   align-items: center
   width: 100%
-  z-index: 1000
-  min-height: 75px
-  background-color: #111112
+  background-color: $black-dark
   .container-header
     display: flex
     justify-content: center
@@ -38,11 +34,13 @@ body
         .info-title
           font-family: 'Spartan', sans-serif
           font-size: 10px
-          color: #ffffff
+          color: $white
     .container-link
       display: flex
       justify-content: flex-start
       align-items: center
+      .divider-link
+        background-color: $red-light
       .search-input
       .link-avatar
         margin: 15px 15px
@@ -56,8 +54,6 @@ body
         .link-title
           font-size: 14px
           font-weight: 600
-          color: #f14238
-    .container-search
-      display: flex
-      justify-content: flex-end
-      align-items: center
+          color: $red-light
+        .active
+          color: $white

@@ -1,0 +1,28 @@
+@import './../../helper/colors'
+
+.wrapper-needs
+  background-color: $yellow-light
+  .container-needs
+    display: flex
+    justify-content: space-around
+    align-items: center
+    .filter-button
+      padding: 0px
+    .container-needs-content
+      border-radius: 5px
+      background-color: $white
+      .need-title
+        white-space: nowrap
+        overflow: hidden
+        text-overflow: ellipsis
+.modal-create
+  position: absolute
+  top: 50%
+  left: 50%
+  transform: translate(-50%, -50%)
+  width: 50%
+  max-height: 75%
+  overflow: auto
+  padding: 32px
+  background-color: $white
+  border: 2px solid

@@ -1,24 +1,26 @@
+@import './../../helper/colors'
+
 .wrapper-landing-login
-  background-color: #d7ba32
-  .container-landing-login
+  width: 100%
+.container-landing-login
+  display: flex
+  justify-content: space-around
+  align-items: center
+  .login-image
+    height: 75vh
+    background-repeat: no-repeat
+    background-position: center
+    background-size: cover
+  .landing-login
     display: flex
-    justify-content: space-around
+    justify-content: center
     align-items: center
-    .login-image
-      height: calc(100vh - 130px)
-      background-repeat: no-repeat
-      background-position: center
-      background-size: cover
-    .landing-login
-      display: flex
-      justify-content: center
-      align-items: center
-    .landing-about
-      display: flex
-      justify-content: center
-      align-items: center
-      .landing-about-content
-        text-align: center
-        font-family: 'Pinyon Script', cursive
-        color: #470b2f
-        font-size: 33px
+  .landing-about
+    display: flex
+    justify-content: center
+    align-items: center
+    .landing-about-content
+      text-align: center
+      font-family: 'Pinyon Script', cursive
+      color: $purple-dark
+      font-size: 33px

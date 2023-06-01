@@ -1,0 +1,16 @@
+=scale-on-hover($scale-factor: 1.2, $duration: 0.3s, $timing-function: ease-in-out)
+  transition: transform $duration $timing-function
+
+  &:hover
+    transform: scale($scale-factor)
+
+.wrapper-dashboard
+  width: 100%
+  .dashboard-card
+    cursor: pointer
+    +scale-on-hover()
+  .icon-customize
+    display: inline-block
+    background-repeat: no-repeat
+    background-position: center
+    background-size: contain
