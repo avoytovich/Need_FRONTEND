@@ -61,6 +61,7 @@ const Login = (props) => {
     const payload = {
       email,
       password,
+      isPrevUserCreated: JSON.parse(localStorage.getItem('isPrevUserCreated')),
     };
     wrapRequest({
       method: 'POST',
@@ -69,14 +70,23 @@ const Login = (props) => {
       cache: 'default',
       data: payload,
     })
-      .then(({ data: { message, token, userId } }) => {
+      .then(({ data: { isPrevUserCreated, message, token, userId } }) => {
         toast.success(message, {
           position: toast.POSITION.TOP_RIGHT,
         });
         if (token && userId) {
           props.dispatchSaveUserId('saveUserId', userId);
           localStorage.setItem('token', JSON.stringify(token));
+          localStorage.setItem(
+            'isPrevUserCreated',
+            JSON.stringify(isPrevUserCreated),
+          );
           setRefresh(true);
+        } else {
+          localStorage.setItem(
+            'isPrevUserCreated',
+            JSON.stringify(isPrevUserCreated),
+          );
         }
       })
       .catch((err) => {
