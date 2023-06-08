@@ -34,6 +34,7 @@ const Header = (props) => {
 
   const handleLogOut = () => {
     localStorage.setItem('token', JSON.stringify(null));
+    localStorage.setItem('isPrevUserCreated', JSON.stringify(false));
     props.dispatchSaveUserId('saveUserId', null);
     props.dispatchSaveUser('saveUser', null);
   };

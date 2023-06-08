@@ -283,8 +283,8 @@ const DashboardOffersView = ({ data, refreshOffer, setRefreshOffer }) => {
   const chatModal = (
     <Chat
       owner="offerOwner"
-      needId={dataOffers[value].need_id}
-      offerId={dataOffers[value].id}
+      needId={dataOffers[value]?.need_id}
+      offerId={dataOffers[value]?.id}
     />
   );
 
