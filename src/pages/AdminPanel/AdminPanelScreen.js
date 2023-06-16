@@ -15,31 +15,6 @@ const AdminPanelScreen = ({ store: { userId } }) => {
   const [loading, setLoading] = useState(true);
   const [exec, setExec] = useState(false);
 
-  useEffect(() => {
-    wrapRequest({
-      method: 'GET',
-      url: `${API.URL[process.env.NODE_ENV]}/user/${userId}/user_list`,
-      mode: 'cors',
-      cache: 'default',
-    })
-      .then(({ data: { users } }) => {
-        users.sort((a, b) => {
-          return (
-            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-          );
-        });
-        setUsersList(users);
-      })
-      .catch((err) =>
-        toast.error(err, {
-          position: toast.POSITION.TOP_RIGHT,
-        }),
-      )
-      .finally(() => {
-        setLoading(false);
-      });
-  }, [userId, exec]);
-
   const acceptActivation = (activateUser_id) => {
     wrapRequest({
       method: 'POST',
@@ -102,6 +77,31 @@ const AdminPanelScreen = ({ store: { userId } }) => {
         }),
       );
   };
+
+  useEffect(() => {
+    wrapRequest({
+      method: 'GET',
+      url: `${API.URL[process.env.NODE_ENV]}/user/${userId}/user_list`,
+      mode: 'cors',
+      cache: 'default',
+    })
+      .then(({ data: { users } }) => {
+        users.sort((a, b) => {
+          return (
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          );
+        });
+        setUsersList(users);
+      })
+      .catch((err) =>
+        toast.error(err, {
+          position: toast.POSITION.TOP_RIGHT,
+        }),
+      )
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [userId, exec]);
 
   if (loading) {
     return <Loader />;

@@ -101,7 +101,7 @@ const Login = (props) => {
     if (refresh) {
       navigate('/dashboard');
     }
-  }, [refresh]);
+  }, [refresh, navigate]);
 
   return (
     <div className="wrapper-landing-login">
