@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Grid,
@@ -57,6 +57,9 @@ const NeedsView = ({
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  const dispatchPrevPageRef = useRef(dispatchPrevPage);
+  const setPageRef = useRef(setPage);
 
   const navigate = useNavigate();
 
@@ -140,14 +143,14 @@ const NeedsView = ({
 
   useEffect(() => {
     if (store.prevPage) {
-      setPage(store.prevPage);
-      dispatchPrevPage('prevPage', null);
+      setPageRef.current(store.prevPage);
+      dispatchPrevPageRef.current('prevPage', null);
     } else {
       if (!data.length) {
-        setPage((p) => p - 1);
+        setPageRef.current((p) => p - 1);
       }
     }
-  }, [data]);
+  }, [data, store.prevPage]);
 
   return (
     <div className="wrapper-needs">
