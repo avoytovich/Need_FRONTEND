@@ -42,6 +42,8 @@ const Header = ({
 
   const handleLogOut = () => {
     localStorage.setItem('token', JSON.stringify(null));
+    localStorage.setItem('refreshToken', JSON.stringify(null));
+    localStorage.setItem('userId', JSON.stringify(null));
     localStorage.setItem('isPrevUserCreated', JSON.stringify(false));
     dispatchSaveUserId('saveUserId', null);
     dispatchSaveUser('saveUser', null);
