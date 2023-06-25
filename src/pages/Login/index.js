@@ -70,25 +70,31 @@ const Login = (props) => {
       cache: 'default',
       data: payload,
     })
-      .then(({ data: { isPrevUserCreated, message, token, userId } }) => {
-        toast.success(message, {
-          position: toast.POSITION.TOP_RIGHT,
-        });
-        if (token && userId) {
-          props.dispatchSaveUserId('saveUserId', userId);
-          localStorage.setItem('token', JSON.stringify(token));
-          localStorage.setItem(
-            'isPrevUserCreated',
-            JSON.stringify(isPrevUserCreated),
-          );
-          setRefresh(true);
-        } else {
-          localStorage.setItem(
-            'isPrevUserCreated',
-            JSON.stringify(isPrevUserCreated),
-          );
-        }
-      })
+      .then(
+        ({
+          data: { isPrevUserCreated, message, token, refreshToken, userId },
+        }) => {
+          toast.success(message, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+          if (token && userId) {
+            props.dispatchSaveUserId('saveUserId', userId);
+            localStorage.setItem('token', JSON.stringify(token));
+            localStorage.setItem('refreshToken', JSON.stringify(refreshToken));
+            localStorage.setItem('userId', JSON.stringify(userId));
+            localStorage.setItem(
+              'isPrevUserCreated',
+              JSON.stringify(isPrevUserCreated),
+            );
+            setRefresh(true);
+          } else {
+            localStorage.setItem(
+              'isPrevUserCreated',
+              JSON.stringify(isPrevUserCreated),
+            );
+          }
+        },
+      )
       .catch((err) => {
         console.log('err', err);
         toast.warning('Something went wrong...', {
