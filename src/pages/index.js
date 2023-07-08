@@ -5,6 +5,7 @@ import DashboardOffers from './Dashboard/DashboardOffers';
 import Needs from './Needs';
 import NeedDetails from './Needs/NeedDetails';
 import AdminPanel from './AdminPanel';
+import Profile from './Profile';
 import ErrorPage from './ErrorPage';
 import Test from './Test';
 
@@ -16,6 +17,7 @@ export {
   Needs,
   NeedDetails,
   AdminPanel,
+  Profile,
   ErrorPage,
   Test,
 };
