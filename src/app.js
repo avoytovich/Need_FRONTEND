@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import createPersistedReducer from 'use-persisted-reducer';
 import { ThemeProvider } from '@mui/material/styles';
 import { ToastContainer } from 'react-toastify';
@@ -13,6 +13,8 @@ import 'react-toastify/dist/ReactToastify.css';
 const App = (props) => {
   const usePersistedReducer = createPersistedReducer('state');
   const [store, dispatch] = usePersistedReducer(generalReducer, {});
+
+  useEffect(() => localStorage.removeItem('token'), []);
 
   // console.log('store', store);
   return (

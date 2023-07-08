@@ -14,7 +14,8 @@ import { links } from './constants';
 import { Loader } from 'components';
 
 import imageLogo from 'assets/images/logo.svg';
-import imageAvatar from 'assets/images/avatar.svg';
+
+import renderAvatar from 'utils/renderAvatar';
 
 import colors from 'helper/colors.sass';
 import './header.sass';
@@ -36,7 +37,7 @@ const Header = ({
 
   const {
     components: {
-      header: { BACK, LOG_OUT },
+      header: { BACK, EXCLAMATION, GREETING, LOG_OUT },
     },
   } = text;
 
@@ -173,15 +174,22 @@ const Header = ({
                   className="link-avatar"
                   width="48px"
                   height="48px"
-                  source={imageAvatar}
+                  source={renderAvatar(store.user?.photo?.data)}
                 />
-                <Link
-                  to="/"
-                  className="link"
-                  onClick={() => resolveOnClickLink('Log Out')}
-                >
-                  <Typography className="link-title">{LOG_OUT}</Typography>
-                </Link>
+                <div className="link-log">
+                  {store.user?.nickname && (
+                    <Typography className="log-nickname">
+                      {`${GREETING} ${store.user?.nickname}${EXCLAMATION}`}
+                    </Typography>
+                  )}
+                  <Link
+                    to="/"
+                    className="link"
+                    onClick={() => resolveOnClickLink('Log Out')}
+                  >
+                    <Typography className="link-title">{LOG_OUT}</Typography>
+                  </Link>
+                </div>
               </>
             )}
           </Grid>

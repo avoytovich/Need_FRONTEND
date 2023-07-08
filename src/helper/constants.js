@@ -14,6 +14,8 @@ const text = {
     },
     header: {
       BACK: 'BACK',
+      GREETING: 'Hi,',
+      EXCLAMATION: '!',
       LOG_OUT: 'Log Out',
     },
     tableFilters: {
@@ -87,6 +89,10 @@ const text = {
     chat: {
       CREATE_MESSAGE: 'Create message',
       SEND: 'Send',
+    },
+    profile: {
+      RESET: 'RESET',
+      SAVE: 'SAVE',
     },
   },
 };
