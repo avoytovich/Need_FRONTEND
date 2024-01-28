@@ -1,20 +1,13 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Box, Card, CardContent, Typography, Grid } from '@mui/material';
 
-import { withLayout } from 'hocs';
 import CustomizeIcon from 'utils/customizeIcon';
 import imageNeed from 'assets/images/logo.svg';
 import imageOffer from 'assets/images/offer.jpg';
 
 import './dashboard.sass';
 
-const DashboardView = (props) => {
-  const navigate = useNavigate();
-
-  const handleClickNeed = () => navigate('/dashboard/needs');
-  const handleClickOffer = () => navigate('/dashboard/offers');
-
+const DashboardView = ({ handleClickNeed, handleClickOffer }) => {
   return (
     <div className="wrapper-dashboard">
       <Grid
@@ -83,4 +76,4 @@ const DashboardView = (props) => {
   );
 };
 
-export default withLayout(DashboardView);
+export default DashboardView;

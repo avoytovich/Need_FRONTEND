@@ -1,6 +1,4 @@
-import React, { useState, useReducer } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import React, { useState } from 'react';
 import {
   Grid,
   Typography,
@@ -12,55 +10,31 @@ import {
 } from '@mui/material';
 
 import Offers from 'pages/Offers';
-import { text, API } from 'helper/constants';
-import { wrapRequest } from 'utils/api';
+import { text } from 'helper/constants';
 
 import colors from 'helper/colors.sass';
 
 const NeedDetailsView = ({
   data,
-  data: { owner_id, title, description, createdAt, status, ability_to_pay },
+  data: { owner_id, createdAt, status },
   currentUserId,
+  updTitle,
+  handleTitle,
+  updAbility,
+  handleAbility,
+  updDescription,
+  handleDescription,
+  handleDelete,
+  handleSave,
+  handleReset,
+  errors,
   refreshNeed,
   setRefreshNeed,
 }) => {
-  const [updTitle, setUpdTitle] = useState(title);
-  const [updAbility, setUpdAbility] = useState(ability_to_pay);
-  const [updDescription, setUpdDescription] = useState(description);
-
-  const reducerError = (state, action) => {
-    switch (action.type) {
-      case 'TITLE_ERROR':
-        return { ...state, title: action.payload };
-      case 'ABILITY_TO_PAY_ERROR':
-        return { ...state, abilityToPay: action.payload };
-      case 'DESCRIPTION_ERROR':
-        return { ...state, description: action.payload };
-      case 'ALL_ERROR':
-        return {
-          ...state,
-          title: action.payload,
-          abilityToPay: action.payload,
-          description: action.payload,
-        };
-      default:
-        throw new Error();
-    }
-  };
-
-  const [errors, dispatchError] = useReducer(reducerError, {
-    title: false,
-    abilityToPay: false,
-    description: false,
-  });
-
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
-  const { id } = useParams();
-  const navigate = useNavigate();
 
   const {
     pages: {
@@ -91,100 +65,6 @@ const NeedDetailsView = ({
         return colors['red-light'];
       default:
         break;
-    }
-  };
-
-  const handleDelete = () => {
-    wrapRequest({
-      method: 'DELETE',
-      url: `${API.URL[process.env.NODE_ENV]}/needs/${id}/delete`,
-      mode: 'cors',
-      cache: 'default',
-    })
-      .then(() => {
-        handleClose();
-        navigate(-1);
-        toast.success(`Need - ${title} was successfully deleted`, {
-          position: toast.POSITION.TOP_RIGHT,
-        });
-      })
-      .catch((err) =>
-        toast.error(err, {
-          position: toast.POSITION.TOP_RIGHT,
-        }),
-      );
-  };
-
-  const handleSave = (e) => {
-    e.stopPropagation();
-    const payload = {
-      title: updTitle,
-      ability_to_pay: updAbility,
-      description: updDescription,
-    };
-    wrapRequest({
-      method: 'PUT',
-      url: `${API.URL[process.env.NODE_ENV]}/needs/${id}/update`,
-      mode: 'cors',
-      cache: 'default',
-      data: payload,
-    })
-      .then(() => {
-        toast.success(`Need - ${title} was successfully updated`, {
-          position: toast.POSITION.TOP_RIGHT,
-        });
-      })
-      .catch((err) =>
-        toast.error(err, {
-          position: toast.POSITION.TOP_RIGHT,
-        }),
-      );
-  };
-
-  const handleReset = (e) => {
-    e.stopPropagation();
-    setUpdTitle(title);
-    setUpdAbility(ability_to_pay);
-    setUpdDescription(description);
-    dispatchError({ type: 'ALL_ERROR', payload: false });
-  };
-
-  const handleTitle = (e) => {
-    e.stopPropagation();
-    if (e.target.value) {
-      dispatchError({ type: 'TITLE_ERROR', payload: false });
-      setUpdTitle(e.target.value);
-    } else if (e.target.value === '') {
-      dispatchError({ type: 'TITLE_ERROR', payload: true });
-      setUpdTitle(e.target.value);
-    } else {
-      dispatchError({ type: 'TITLE_ERROR', payload: true });
-    }
-  };
-
-  const handleAbility = (e) => {
-    e.stopPropagation();
-    if (e.target.value && !isNaN(e.target.value)) {
-      dispatchError({ type: 'ABILITY_TO_PAY_ERROR', payload: false });
-      setUpdAbility(e.target.value);
-    } else if (e.target.value === '') {
-      dispatchError({ type: 'ABILITY_TO_PAY_ERROR', payload: true });
-      setUpdAbility(e.target.value);
-    } else {
-      dispatchError({ type: 'ABILITY_TO_PAY_ERROR', payload: true });
-    }
-  };
-
-  const handleDescription = (e) => {
-    e.stopPropagation();
-    if (e.target.value !== '') {
-      dispatchError({ type: 'DESCRIPTION_ERROR', payload: false });
-      setUpdDescription(e.target.value);
-    } else if (e.target.value === '') {
-      dispatchError({ type: 'DESCRIPTION_ERROR', payload: true });
-      setUpdDescription(e.target.value);
-    } else {
-      dispatchError({ type: 'DESCRIPTION_ERROR', payload: true });
     }
   };
 
@@ -332,7 +212,11 @@ const NeedDetailsView = ({
                           style={{
                             width: '100px',
                           }}
-                          onClick={handleDelete}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleClose();
+                            handleDelete();
+                          }}
                         >
                           {YES}
                         </Button>

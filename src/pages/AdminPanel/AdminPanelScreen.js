@@ -15,16 +15,16 @@ const AdminPanelScreen = ({ store: { userId } }) => {
   const [loading, setLoading] = useState(true);
   const [exec, setExec] = useState(false);
 
-  const acceptActivation = (activateUser_id) => {
+  const acceptActivation = (id) => {
     wrapRequest({
       method: 'POST',
       url: `${API.URL[process.env.NODE_ENV]}/user/${userId}/user_activate`,
-      data: { id: activateUser_id },
+      data: { id },
       mode: 'cors',
       cache: 'default',
     })
-      .then((data) => {
-        toast.success(`User with id-${activateUser_id} is activated`, {
+      .then(() => {
+        toast.success(`User with id-${id} is activated`, {
           position: toast.POSITION.TOP_RIGHT,
         });
         setExec(!exec);
@@ -36,16 +36,16 @@ const AdminPanelScreen = ({ store: { userId } }) => {
       );
   };
 
-  const declineActivation = (activateUser_id) => {
+  const declineActivation = (id) => {
     wrapRequest({
       method: 'POST',
       url: `${API.URL[process.env.NODE_ENV]}/user/${userId}/user_deactivate`,
-      data: { id: activateUser_id },
+      data: { id },
       mode: 'cors',
       cache: 'default',
     })
-      .then((data) => {
-        toast.success(`User with id-${activateUser_id} is deactivated`, {
+      .then(() => {
+        toast.success(`User with id-${id} is deactivated`, {
           position: toast.POSITION.TOP_RIGHT,
         });
         setExec(!exec);
@@ -57,16 +57,16 @@ const AdminPanelScreen = ({ store: { userId } }) => {
       );
   };
 
-  const deleteUser = (activateUser_id) => {
+  const deleteUser = (id) => {
     wrapRequest({
       method: 'DELETE',
       url: `${API.URL[process.env.NODE_ENV]}/user/${userId}/user_delete`,
-      data: { id: activateUser_id },
+      data: { id },
       mode: 'cors',
       cache: 'default',
     })
-      .then((data) => {
-        toast.success(`User with id-${activateUser_id} is deleted`, {
+      .then(() => {
+        toast.success(`User with id-${id} is deleted`, {
           position: toast.POSITION.TOP_RIGHT,
         });
         setExec(!exec);
@@ -76,6 +76,13 @@ const AdminPanelScreen = ({ store: { userId } }) => {
           position: toast.POSITION.TOP_RIGHT,
         }),
       );
+  };
+
+  const handleToggle = (id) => () => {
+    const user = usersList.find((user) => user.id === id);
+    if (user) {
+      user.isActivate ? declineActivation(id) : acceptActivation(id);
+    }
   };
 
   useEffect(() => {
@@ -109,9 +116,8 @@ const AdminPanelScreen = ({ store: { userId } }) => {
 
   return (
     <AdminPanelView
-      data={usersList}
-      activation={acceptActivation}
-      deactivation={declineActivation}
+      usersList={usersList}
+      handleToggle={handleToggle}
       deleteUser={deleteUser}
     />
   );

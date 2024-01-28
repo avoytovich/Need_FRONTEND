@@ -1,65 +1,21 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
 import { Typography, Box, TextField, Divider, Button } from '@mui/material';
-import { toast } from 'react-toastify';
 
-import { wrapRequest } from 'utils/api';
-import { API, text } from 'helper/constants';
+import { text } from 'helper/constants';
 
 import './offer_add.sass';
 
 const OfferAddView = ({
+  handleDescription,
+  handleSubmit,
   handleClose,
-  description,
-  setDescription,
   errors,
-  dispatchError,
 }) => {
-  const { id } = useParams();
-
   const {
     pages: {
       offerAdd: { CREATING_OFFER, DESCRIPTION, SAVE, CANCEL },
     },
   } = text;
-
-  const handleDescription = (value) => {
-    setDescription(value);
-    if (!value) {
-      dispatchError({ type: 'DESCRIPTION', payload: true });
-    } else {
-      dispatchError({ type: 'DESCRIPTION', payload: false });
-    }
-  };
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    if (!description) {
-      !description && dispatchError({ type: 'DESCRIPTION', payload: true });
-      return;
-    }
-    const payload = {
-      description,
-    };
-    await wrapRequest({
-      method: 'POST',
-      url: `${API.URL[process.env.NODE_ENV]}/offer/create?needId=${id}`,
-      mode: 'cors',
-      cache: 'default',
-      data: payload,
-    })
-      .then(({ data: { message } }) => {
-        handleClose();
-        toast.success(message, {
-          position: toast.POSITION.TOP_RIGHT,
-        });
-      })
-      .catch((err) =>
-        toast.error(err, {
-          position: toast.POSITION.TOP_RIGHT,
-        }),
-      );
-  };
 
   return (
     <Box className="modal-create">

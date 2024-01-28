@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Grid,
   Typography,
@@ -15,132 +15,24 @@ import {
   IconButton,
 } from '@mui/material';
 import { PhotoCamera } from '@mui/icons-material';
-import { toast } from 'react-toastify';
 
-import { text, API } from 'helper/constants';
-import { wrapRequest } from 'utils/api';
-import connect from 'utils/connectFunction';
-import renderAvatar from 'utils/renderAvatar';
-import action from 'utils/actions';
-import { withLayout } from 'hocs';
+import { text } from 'helper/constants';
 
 import colors from 'helper/colors.sass';
 import './profile.sass';
 
-const ProfileView = ({ store, dispatchSaveUser }) => {
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [nickname, setNickname] = useState(store.user?.nickname);
-  const [open, setOpen] = useState(false);
-  const [selectedAvatar, setSelectedAvatar] = useState(
-    renderAvatar(store.user?.photo?.data),
-  );
-
-  const handleOpenDialog = () => {
-    setOpen(true);
-  };
-
-  const handleCloseDialog = () => {
-    setOpen(false);
-  };
-
-  const handleAvatarChange = (event) => {
-    const file = event.target.files[0];
-    setSelectedFile(event.target.files[0]);
-    setSelectedAvatar(URL.createObjectURL(file));
-    handleCloseDialog();
-  };
-
-  const saveWithoutAvatar = () => {
-    let url = `${API.URL[process.env.NODE_ENV]}/user/${store.userId}/update`;
-    wrapRequest({
-      method: 'PUT',
-      url,
-      mode: 'cors',
-      cache: 'default',
-      data: { nickname },
-    }).then((data) => {
-      toast.success(data.message || 'nickname was successfully updated', {
-        position: toast.POSITION.TOP_RIGHT,
-      });
-      wrapRequest({
-        method: 'GET',
-        url: `${API.URL[process.env.NODE_ENV]}/user/${store.userId}`,
-        mode: 'cors',
-        cache: 'default',
-      })
-        .then(({ data: { user } }) => {
-          dispatchSaveUser('saveUser', user);
-        })
-        .catch((err) =>
-          toast.error(err, {
-            position: toast.POSITION.TOP_RIGHT,
-          }),
-        );
-    });
-  };
-
-  const saveWithAvatar = () => {
-    const formData = new FormData();
-    formData.append('avatar', selectedFile);
-    wrapRequest({
-      method: 'POST',
-      url: `${API.URL[process.env.NODE_ENV]}/upload-avatar`,
-      mode: 'cors',
-      cache: 'default',
-      headers: {
-        'Content-Type': 'multipart/form-data',
-        'x-access-token': JSON.parse(localStorage.getItem('token')),
-        'Access-Control-Allow-Origin': '*', // temp
-      },
-      data: formData,
-    })
-      .then((data) => {
-        toast.success(data.message || 'successfully add new avatar', {
-          position: toast.POSITION.TOP_RIGHT,
-        });
-        wrapRequest({
-          method: 'GET',
-          url: `${API.URL[process.env.NODE_ENV]}/user/${store.userId}`,
-          mode: 'cors',
-          cache: 'default',
-        })
-          .then(({ data: { user } }) => {
-            dispatchSaveUser('saveUser', user);
-          })
-          .catch((err) =>
-            toast.error(err, {
-              position: toast.POSITION.TOP_RIGHT,
-            }),
-          );
-      })
-      .catch((err) =>
-        toast.error(err, {
-          position: toast.POSITION.TOP_RIGHT,
-        }),
-      )
-      .finally(() => {
-        setSelectedFile(null);
-      });
-  };
-
-  const handleReset = (e) => {
-    e.stopPropagation();
-    setNickname(store.user?.nickname);
-    setSelectedAvatar(renderAvatar(store.user?.photo?.data));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (selectedFile && nickname === store.user?.nickname) {
-      saveWithAvatar();
-    } else if (!selectedFile && nickname !== store.user?.nickname) {
-      saveWithoutAvatar();
-    } else if (selectedFile && nickname !== store.user?.nickname) {
-      saveWithAvatar();
-      saveWithoutAvatar();
-    }
-  };
-
+const ProfileView = ({
+  open,
+  handleOpenDialog,
+  handleCloseDialog,
+  nickname,
+  setNickname,
+  isDisabled,
+  handleReset,
+  handleSubmit,
+  handleAvatarChange,
+  selectedAvatar,
+}) => {
   const {
     pages: {
       profile: { SAVE, RESET },
@@ -223,9 +115,7 @@ const ProfileView = ({ store, dispatchSaveUser }) => {
                       margin: '5px',
                       width: '100px',
                     }}
-                    disabled={
-                      selectedFile === null && nickname === store.user?.nickname
-                    }
+                    disabled={isDisabled}
                   >
                     {SAVE}
                   </Button>
@@ -268,18 +158,4 @@ const ProfileView = ({ store, dispatchSaveUser }) => {
   );
 };
 
-const mapStateToProps = (state) => {
-  return { store: state };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  const actionData = (name, payload) => dispatch(action(name, payload));
-  return {
-    dispatchSaveUser: actionData,
-  };
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(withLayout(ProfileView));
+export default ProfileView;
