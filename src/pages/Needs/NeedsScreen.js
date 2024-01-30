@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
 import connect from 'utils/connectFunction';
-// import action from 'utils/actions';
+import action from 'utils/actions';
 import { withLayout } from 'hocs';
 import { API, PER_PAGE } from 'helper/constants';
 import { wrapRequest } from 'utils/api';
 import NeedsView from './NeedsView';
 import { Loader } from 'components';
 
-const NeedsScreen = (props) => {
+const NeedsScreen = ({ store, dispatchPrevPage }) => {
   const [showFilters, setShowFilters] = useState(null);
   const [filtersCount, setFilterCount] = useState(0);
   const [actual, setActual] = useState(false);
@@ -26,6 +26,13 @@ const NeedsScreen = (props) => {
   const [loading, setLoading] = useState(true);
 
   const handleChange = (e, p) => setPage(p);
+
+  useEffect(() => {
+    if (store.prevPage) {
+      setPage(store.prevPage);
+      dispatchPrevPage('prevPage', null);
+    }
+  }, [dispatchPrevPage, store.prevPage]);
 
   useEffect(() => {
     const filterArray = [actual, noActual, inProgress].filter(
@@ -73,6 +80,9 @@ const NeedsScreen = (props) => {
       cache: 'default',
     })
       .then(({ data: { needs, totalItems, totalPages } }) => {
+        if (!needs.length && page > 1) {
+          setPage((p) => p - 1);
+        }
         setData(needs);
         setTotalItems(totalItems);
         setTotalPages(totalPages);
@@ -93,6 +103,7 @@ const NeedsScreen = (props) => {
 
   return (
     <NeedsView
+      dispatchPrevPage={dispatchPrevPage}
       showFilters={showFilters}
       setShowFilters={setShowFilters}
       filtersCount={filtersCount}
@@ -124,10 +135,13 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
-  // const actionData = (name, payload) => dispatch(action(name, payload));
+  const actionData = (name, payload) => dispatch(action(name, payload));
   return {
-    // dispatchPrevPage: actionData,
+    dispatchPrevPage: actionData,
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(NeedsScreen);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(withLayout(NeedsScreen));

@@ -1,66 +1,16 @@
-import React, { useState } from 'react';
-import { toast } from 'react-toastify';
+import React from 'react';
 import { Box, TextField, Button } from '@mui/material';
 
-import { text, API } from 'helper/constants';
-import { wrapRequest } from 'utils/api';
+import { text } from 'helper/constants';
 
 import colors from 'helper/colors.sass';
 
-const ChatView = ({
-  owner,
-  needId,
-  offerId,
-  data,
-  refreshChat,
-  setRefreshChat,
-}) => {
-  // console.log('data', data);
-  const [message, setMessage] = useState('');
-
+const ChatView = ({ message, handleMessage, handleSendMessage, data }) => {
   const {
     pages: {
       chat: { CREATE_MESSAGE, SEND },
     },
   } = text;
-
-  const handleMessage = (e) => setMessage(e.target.value);
-
-  const handleSendMessage = () => {
-    let url = `${
-      API.URL[process.env.NODE_ENV]
-    }/chat/create_update?needId=${needId}&offerId=${offerId}`;
-    let payload;
-    if (data.chat) {
-      payload = {
-        messeges: [...data.chat.messeges, `${owner}: ${message}`],
-      };
-    } else {
-      payload = {
-        messeges: [`${owner}: ${message}`],
-      };
-    }
-    wrapRequest({
-      method: 'POST',
-      url,
-      mode: 'cors',
-      cache: 'default',
-      data: payload,
-    })
-      .then(({ data }) => {
-        toast.success(data.message, {
-          position: toast.POSITION.TOP_RIGHT,
-        });
-      })
-      .catch((err) =>
-        toast.error(err, {
-          position: toast.POSITION.TOP_RIGHT,
-        }),
-      )
-      .finally(() => {
-        setRefreshChat(!refreshChat);
-      });
-  };
 
   const isNeedOwner = (item) => item.indexOf('needOwner') !== -1;
 
@@ -74,6 +24,7 @@ const ChatView = ({
       >
         {data.chat?.messeges.map((item) => (
           <Box
+            key={item}
             sx={{
               display: 'flex',
               flexDirection: 'column',

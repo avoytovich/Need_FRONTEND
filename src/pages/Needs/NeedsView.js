@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Grid,
@@ -20,15 +20,11 @@ import { FilterList as FilterListIcon } from '@mui/icons-material';
 import { TableFilters } from 'components';
 import NeedAdd from './NeedAdd';
 import { text } from 'helper/constants';
-import connect from 'utils/connectFunction';
-import action from 'utils/actions';
-import { withLayout } from 'hocs';
 
 import colors from 'helper/colors.sass';
 import './needs.sass';
 
 const NeedsView = ({
-  store,
   showFilters,
   setShowFilters,
   filtersCount,
@@ -57,9 +53,6 @@ const NeedsView = ({
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
-  const dispatchPrevPageRef = useRef(dispatchPrevPage);
-  const setPageRef = useRef(setPage);
 
   const navigate = useNavigate();
 
@@ -140,17 +133,6 @@ const NeedsView = ({
   };
 
   const handleDate = (date) => new Date(date).toLocaleDateString();
-
-  useEffect(() => {
-    if (store.prevPage) {
-      setPageRef.current(store.prevPage);
-      dispatchPrevPageRef.current('prevPage', null);
-    } else {
-      if (!data.length) {
-        setPageRef.current((p) => p - 1);
-      }
-    }
-  }, [data, store.prevPage]);
 
   return (
     <div className="wrapper-needs">
@@ -333,18 +315,4 @@ const NeedsView = ({
   );
 };
 
-const mapStateToProps = (state) => {
-  return { store: state };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  const actionData = (name, payload) => dispatch(action(name, payload));
-  return {
-    dispatchPrevPage: actionData,
-  };
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(withLayout(NeedsView));
+export default NeedsView;
