@@ -13,7 +13,7 @@ import {
 import { ArrowForwardIos, ArrowBackIos } from '@mui/icons-material';
 
 import { text } from 'helper/constants';
-import Chat from 'pages/Chat';
+import Chat from 'components/Chat';
 
 import colors from 'helper/colors.sass';
 
@@ -131,6 +131,7 @@ const DashboardOffersView = ({
       owner="offerOwner"
       needId={dataOffers[value]?.need_id}
       offerId={dataOffers[value]?.id}
+      handleClose={handleClose}
     />
   );
 

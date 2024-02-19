@@ -7,7 +7,7 @@ import { Loader } from 'components';
 
 import ChatView from './ChatView';
 
-const ChatScreen = ({ owner, needId, offerId }) => {
+const ChatScreen = ({ owner, needId, offerId, handleClose }) => {
   const [data, setData] = useState([]);
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(true);
@@ -85,6 +85,7 @@ const ChatScreen = ({ owner, needId, offerId }) => {
       message={message}
       handleMessage={handleMessage}
       handleSendMessage={handleSendMessage}
+      handleClose={handleClose}
     />
   );
 };
