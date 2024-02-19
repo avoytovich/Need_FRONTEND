@@ -89,6 +89,7 @@ const text = {
     chat: {
       CREATE_MESSAGE: 'Create message',
       SEND: 'Send',
+      CANCEL: 'CANCEL',
     },
     profile: {
       RESET: 'RESET',

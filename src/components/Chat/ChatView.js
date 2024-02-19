@@ -5,10 +5,16 @@ import { text } from 'helper/constants';
 
 import colors from 'helper/colors.sass';
 
-const ChatView = ({ message, handleMessage, handleSendMessage, data }) => {
+const ChatView = ({
+  message,
+  handleMessage,
+  handleSendMessage,
+  data,
+  handleClose,
+}) => {
   const {
     pages: {
-      chat: { CREATE_MESSAGE, SEND },
+      chat: { CREATE_MESSAGE, SEND, CANCEL },
     },
   } = text;
 
@@ -71,13 +77,29 @@ const ChatView = ({ message, handleMessage, handleSendMessage, data }) => {
           />
         </Box>
         <Box m={2}>
-          <Button
-            color="green_light"
-            variant="contained"
-            onClick={handleSendMessage}
-          >
-            {SEND}
-          </Button>
+          <Box m={2}>
+            <Button
+              color="green_light"
+              variant="contained"
+              style={{
+                width: '100%',
+              }}
+              onClick={handleSendMessage}
+            >
+              {SEND}
+            </Button>
+          </Box>
+          <Box m={2}>
+            <Button
+              variant="outlined"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleClose();
+              }}
+            >
+              {CANCEL}
+            </Button>
+          </Box>
         </Box>
       </Box>
     </Box>

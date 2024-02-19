@@ -15,7 +15,7 @@ import { ArrowForwardIos, ArrowBackIos } from '@mui/icons-material';
 
 import { text } from 'helper/constants';
 import OfferAdd from './OfferAdd';
-import Chat from 'pages/Chat';
+import Chat from 'components/Chat';
 
 import colors from 'helper/colors.sass';
 import './offer.sass';
@@ -120,6 +120,7 @@ const OffersView = ({
                 owner="needOwner"
                 needId={need.id}
                 offerId={dataOffers[value].id}
+                handleClose={handleClose}
               />
             </Box>
           </Modal>
