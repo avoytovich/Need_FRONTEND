@@ -14,6 +14,7 @@ import {
   Login,
   Needs,
   NeedDetails,
+  Profile,
   AdminPanel,
   Test,
 } from 'pages';
@@ -88,6 +89,14 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <NeedDetails />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/profile',
+    element: (
+      <ProtectedRoute>
+        <Profile />
       </ProtectedRoute>
     ),
   },

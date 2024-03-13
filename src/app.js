@@ -14,7 +14,7 @@ const App = (props) => {
   const usePersistedReducer = createPersistedReducer('state');
   const [store, dispatch] = usePersistedReducer(generalReducer, {});
 
-  useEffect(() => {}, []);
+  useEffect(() => localStorage.removeItem('token'), []);
 
   // console.log('store', store);
   return (

@@ -15,6 +15,76 @@ const AdminPanelScreen = ({ store: { userId } }) => {
   const [loading, setLoading] = useState(true);
   const [exec, setExec] = useState(false);
 
+  const acceptActivation = (id) => {
+    wrapRequest({
+      method: 'POST',
+      url: `${API.URL[process.env.NODE_ENV]}/user/${userId}/user_activate`,
+      data: { id },
+      mode: 'cors',
+      cache: 'default',
+    })
+      .then(() => {
+        toast.success(`User with id-${id} is activated`, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+        setExec(!exec);
+      })
+      .catch((err) =>
+        toast.error(err, {
+          position: toast.POSITION.TOP_RIGHT,
+        }),
+      );
+  };
+
+  const declineActivation = (id) => {
+    wrapRequest({
+      method: 'POST',
+      url: `${API.URL[process.env.NODE_ENV]}/user/${userId}/user_deactivate`,
+      data: { id },
+      mode: 'cors',
+      cache: 'default',
+    })
+      .then(() => {
+        toast.success(`User with id-${id} is deactivated`, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+        setExec(!exec);
+      })
+      .catch((err) =>
+        toast.error(err, {
+          position: toast.POSITION.TOP_RIGHT,
+        }),
+      );
+  };
+
+  const deleteUser = (id) => {
+    wrapRequest({
+      method: 'DELETE',
+      url: `${API.URL[process.env.NODE_ENV]}/user/${userId}/user_delete`,
+      data: { id },
+      mode: 'cors',
+      cache: 'default',
+    })
+      .then(() => {
+        toast.success(`User with id-${id} is deleted`, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+        setExec(!exec);
+      })
+      .catch((err) =>
+        toast.error(err, {
+          position: toast.POSITION.TOP_RIGHT,
+        }),
+      );
+  };
+
+  const handleToggle = (id) => () => {
+    const user = usersList.find((user) => user.id === id);
+    if (user) {
+      user.isActivate ? declineActivation(id) : acceptActivation(id);
+    }
+  };
+
   useEffect(() => {
     wrapRequest({
       method: 'GET',
@@ -40,78 +110,14 @@ const AdminPanelScreen = ({ store: { userId } }) => {
       });
   }, [userId, exec]);
 
-  const acceptActivation = (activateUser_id) => {
-    wrapRequest({
-      method: 'POST',
-      url: `${API.URL[process.env.NODE_ENV]}/user/${userId}/user_activate`,
-      data: { id: activateUser_id },
-      mode: 'cors',
-      cache: 'default',
-    })
-      .then((data) => {
-        toast.success(`User with id-${activateUser_id} is activated`, {
-          position: toast.POSITION.TOP_RIGHT,
-        });
-        setExec(!exec);
-      })
-      .catch((err) =>
-        toast.error(err, {
-          position: toast.POSITION.TOP_RIGHT,
-        }),
-      );
-  };
-
-  const declineActivation = (activateUser_id) => {
-    wrapRequest({
-      method: 'POST',
-      url: `${API.URL[process.env.NODE_ENV]}/user/${userId}/user_deactivate`,
-      data: { id: activateUser_id },
-      mode: 'cors',
-      cache: 'default',
-    })
-      .then((data) => {
-        toast.success(`User with id-${activateUser_id} is deactivated`, {
-          position: toast.POSITION.TOP_RIGHT,
-        });
-        setExec(!exec);
-      })
-      .catch((err) =>
-        toast.error(err, {
-          position: toast.POSITION.TOP_RIGHT,
-        }),
-      );
-  };
-
-  const deleteUser = (activateUser_id) => {
-    wrapRequest({
-      method: 'DELETE',
-      url: `${API.URL[process.env.NODE_ENV]}/user/${userId}/user_delete`,
-      data: { id: activateUser_id },
-      mode: 'cors',
-      cache: 'default',
-    })
-      .then((data) => {
-        toast.success(`User with id-${activateUser_id} is deleted`, {
-          position: toast.POSITION.TOP_RIGHT,
-        });
-        setExec(!exec);
-      })
-      .catch((err) =>
-        toast.error(err, {
-          position: toast.POSITION.TOP_RIGHT,
-        }),
-      );
-  };
-
   if (loading) {
     return <Loader />;
   }
 
   return (
     <AdminPanelView
-      data={usersList}
-      activation={acceptActivation}
-      deactivation={declineActivation}
+      usersList={usersList}
+      handleToggle={handleToggle}
       deleteUser={deleteUser}
     />
   );

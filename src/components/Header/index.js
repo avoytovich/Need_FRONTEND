@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment, useRef, useEffect, useState } from 'react';
 import { Grid, Typography, IconButton, Stack, Divider } from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
@@ -14,34 +14,46 @@ import { links } from './constants';
 import { Loader } from 'components';
 
 import imageLogo from 'assets/images/logo.svg';
-import imageAvatar from 'assets/images/avatar.svg';
+
+import renderAvatar from 'utils/renderAvatar';
 
 import colors from 'helper/colors.sass';
 import './header.sass';
 
-const Header = (props) => {
+const Header = ({
+  store,
+  dispatchSaveUserId,
+  dispatchSaveUser,
+  dispatchActiveLink,
+}) => {
   // console.log('Header props', props);
   const [loading, setLoading] = useState(true);
+
+  const dispatchActiveLinkRef = useRef(dispatchActiveLink);
+  const dispatchSaveUserRef = useRef(dispatchSaveUser);
 
   const navigate = useNavigate();
   let location = useLocation();
 
   const {
     components: {
-      header: { BACK, LOG_OUT },
+      header: { BACK, EXCLAMATION, GREETING, LOG_OUT },
     },
   } = text;
 
   const handleLogOut = () => {
     localStorage.setItem('token', JSON.stringify(null));
-    props.dispatchSaveUserId('saveUserId', null);
-    props.dispatchSaveUser('saveUser', null);
+    localStorage.setItem('refreshToken', JSON.stringify(null));
+    localStorage.setItem('userId', JSON.stringify(null));
+    localStorage.setItem('isPrevUserCreated', JSON.stringify(false));
+    dispatchSaveUserId('saveUserId', null);
+    dispatchSaveUser('saveUser', null);
   };
 
-  const isAuth = checkAuth(props.store.userId);
+  const isAuth = checkAuth(store.userId);
 
   const resolveOnClickLink = (title) => {
-    props.dispatchActiveLink('saveActiveLink', title);
+    dispatchActiveLink('saveActiveLink', title);
     switch (title) {
       case 'Log Out':
         handleLogOut();
@@ -52,31 +64,33 @@ const Header = (props) => {
   };
 
   useEffect(() => {
-    if (location.pathname.startsWith('/needs')) {
-      props.dispatchActiveLink('saveActiveLink', 'NEEDS');
-    } else if (location.pathname.startsWith('/dashboard')) {
-      props.dispatchActiveLink('saveActiveLink', 'DASHBOARD');
-    } else if (location.pathname.startsWith('/profile')) {
-      props.dispatchActiveLink('saveActiveLink', 'PROFILE');
-    } else if (location.pathname.startsWith('/admin')) {
-      props.dispatchActiveLink('saveActiveLink', 'ADMIN');
+    const { pathname } = location;
+
+    if (pathname.startsWith('/needs')) {
+      dispatchActiveLinkRef.current('saveActiveLink', 'NEEDS');
+    } else if (pathname.startsWith('/dashboard')) {
+      dispatchActiveLinkRef.current('saveActiveLink', 'DASHBOARD');
+    } else if (pathname.startsWith('/profile')) {
+      dispatchActiveLinkRef.current('saveActiveLink', 'PROFILE');
+    } else if (pathname.startsWith('/admin')) {
+      dispatchActiveLinkRef.current('saveActiveLink', 'ADMIN');
     } else {
-      props.dispatchActiveLink('saveActiveLink', null);
+      dispatchActiveLinkRef.current('saveActiveLink', null);
     }
   }, [location]);
 
   useEffect(() => {
-    if (!props.store.userId || props.store.user?.id === props.store.userId) {
+    if (!store.userId || store.user?.id === store.userId) {
       setLoading(false);
     } else {
       wrapRequest({
         method: 'GET',
-        url: `${API.URL[process.env.NODE_ENV]}/user/${props.store.userId}`,
+        url: `${API.URL[process.env.NODE_ENV]}/user/${store.userId}`,
         mode: 'cors',
         cache: 'default',
       })
         .then(({ data: { user } }) => {
-          props.dispatchSaveUser('saveUser', user);
+          dispatchSaveUserRef.current('saveUser', user);
         })
         .catch((err) =>
           toast.error(err, {
@@ -87,7 +101,7 @@ const Header = (props) => {
           setLoading(false);
         });
     }
-  }, []);
+  }, [store.user?.id, store.userId]);
 
   if (loading) {
     return <Loader />;
@@ -130,26 +144,26 @@ const Header = (props) => {
                 }
                 spacing={1}
               >
-                {links[
-                  props.store.user?.isAdmin ? 'withAdmin' : 'withoutAdmin'
-                ].map((item) => {
-                  return (
-                    <Link
-                      key={item.id}
-                      to={item.route}
-                      className="link"
-                      onClick={() => resolveOnClickLink(item.title)}
-                    >
-                      <Typography
-                        className={`link-title ${
-                          props.store.activeLink === item.title && 'active'
-                        }`}
+                {links[store.user?.isAdmin ? 'withAdmin' : 'withoutAdmin'].map(
+                  (item) => {
+                    return (
+                      <Link
+                        key={item.id}
+                        to={item.route}
+                        className="link"
+                        onClick={() => resolveOnClickLink(item.title)}
                       >
-                        {item.title}
-                      </Typography>
-                    </Link>
-                  );
-                })}
+                        <Typography
+                          className={`link-title ${
+                            store.activeLink === item.title && 'active'
+                          }`}
+                        >
+                          {item.title}
+                        </Typography>
+                      </Link>
+                    );
+                  },
+                )}
               </Stack>
             )}
           </Grid>
@@ -160,15 +174,22 @@ const Header = (props) => {
                   className="link-avatar"
                   width="48px"
                   height="48px"
-                  source={imageAvatar}
+                  source={renderAvatar(store.user?.photo?.data)}
                 />
-                <Link
-                  to="/"
-                  className="link"
-                  onClick={() => resolveOnClickLink('Log Out')}
-                >
-                  <Typography className="link-title">{LOG_OUT}</Typography>
-                </Link>
+                <div className="link-log">
+                  {store.user?.nickname && (
+                    <Typography className="log-nickname">
+                      {`${GREETING} ${store.user?.nickname}${EXCLAMATION}`}
+                    </Typography>
+                  )}
+                  <Link
+                    to="/"
+                    className="link"
+                    onClick={() => resolveOnClickLink('Log Out')}
+                  >
+                    <Typography className="link-title">{LOG_OUT}</Typography>
+                  </Link>
+                </div>
               </>
             )}
           </Grid>

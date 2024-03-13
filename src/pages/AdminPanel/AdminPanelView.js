@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import List from '@mui/material/List';
 import ListSubheader from '@mui/material/ListSubheader';
 import ListItem from '@mui/material/ListItem';
@@ -11,37 +11,15 @@ import Avatar from '@mui/material/Avatar';
 import { Delete } from '@mui/icons-material';
 
 import imageAvatar from 'assets/images/avatar.svg';
+import renderAvatar from 'utils/renderAvatar';
 import { text } from 'helper/constants';
 
-const AdminPanelView = ({ data, activation, deactivation, deleteUser }) => {
-  const [checked, setChecked] = useState(
-    data.reduce((acc, user) => {
-      if (user.isActivate) {
-        acc = [...acc, user.id];
-      }
-      return acc;
-    }, []),
-  );
-
+const AdminPanelView = ({ usersList, handleToggle, deleteUser }) => {
   const {
     pages: {
       admin: { TITLE },
     },
   } = text;
-
-  const handleToggle = (value) => () => {
-    const currentIndex = checked.indexOf(value);
-    const newChecked = [...checked];
-
-    if (currentIndex === -1) {
-      newChecked.push(value);
-      activation(value);
-    } else {
-      newChecked.splice(currentIndex, 1);
-      deactivation(value);
-    }
-    setChecked(newChecked);
-  };
 
   return (
     <div className="wrapper-admin">
@@ -56,7 +34,7 @@ const AdminPanelView = ({ data, activation, deactivation, deleteUser }) => {
           </ListSubheader>
         }
       >
-        {data.map(({ id, email, photo, isActivate }) => {
+        {usersList.map(({ id, email, photo, isActivate }) => {
           const labelId = `checkbox-list-secondary-label-${id}`;
           return (
             <ListItem
@@ -80,7 +58,10 @@ const AdminPanelView = ({ data, activation, deactivation, deleteUser }) => {
             >
               <ListItemButton>
                 <ListItemAvatar>
-                  <Avatar alt={`Avatar n°${id}`} src={photo || imageAvatar} />
+                  <Avatar
+                    alt={`Avatar n°${id}`}
+                    src={photo ? renderAvatar(photo?.data) : imageAvatar}
+                  />
                 </ListItemAvatar>
                 <ListItemText
                   id={labelId}

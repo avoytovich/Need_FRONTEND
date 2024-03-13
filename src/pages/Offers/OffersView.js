@@ -1,5 +1,4 @@
-import React, { useState, Fragment, useEffect, useMemo } from 'react';
-import { toast } from 'react-toastify';
+import React, { useState, Fragment } from 'react';
 
 import {
   Button,
@@ -14,31 +13,27 @@ import {
 
 import { ArrowForwardIos, ArrowBackIos } from '@mui/icons-material';
 
-import { text, API } from 'helper/constants';
-import { wrapRequest } from 'utils/api';
+import { text } from 'helper/constants';
 import OfferAdd from './OfferAdd';
-import Chat from 'pages/Chat';
+import Chat from 'components/Chat';
 
 import colors from 'helper/colors.sass';
 import './offer.sass';
 
 const OffersView = ({
   data,
+  dataOffers,
+  value,
+  paginDataForward,
+  paginDataBack,
+  paginOffers,
+  handleChange,
   isOwnerNeed,
   need,
-  refreshOffer,
-  setRefreshOffer,
-  refreshNeed,
-  setRefreshNeed,
+  handleRejection,
+  handleAcception,
 }) => {
-  const [value, setValue] = useState(0);
   const [open, setOpen] = useState(false);
-  const [paginOffers, setPaginOffers] = useState(0);
-
-  const dataOffers = useMemo(
-    () => data.slice(paginOffers * 5, paginOffers * 5 + 5),
-    [data, paginOffers],
-  );
 
   const {
     pages: {
@@ -57,20 +52,6 @@ const OffersView = ({
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
-  const paginDataForward = () => {
-    if (data.length > 5) {
-      setPaginOffers((s) => (s += 1));
-      setValue(0);
-    }
-  };
-
-  const paginDataBack = () => {
-    if (data.length > 5) {
-      setPaginOffers((s) => (s -= 1));
-      setValue(0);
-    }
-  };
 
   const TabPanel = (props) => {
     const { children, value, index, ...other } = props;
@@ -91,71 +72,11 @@ const OffersView = ({
     );
   };
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
-
   const a11yProps = (index) => {
     return {
       id: `simple-tab-${index}`,
       'aria-controls': `simple-tabpanel-${index}`,
     };
-  };
-
-  const handleRejection = (e) => {
-    let url = `${API.URL[process.env.NODE_ENV]}/offer/${
-      dataOffers[value].id
-    }/accept_reject`;
-    const payload = { isAccepted: false };
-    wrapRequest({
-      method: 'PUT',
-      url,
-      mode: 'cors',
-      cache: 'default',
-      data: payload,
-    })
-      .then(({ data }) => {
-        toast.success(data.message, {
-          position: toast.POSITION.TOP_RIGHT,
-        });
-      })
-      .catch((err) =>
-        toast.error(err, {
-          position: toast.POSITION.TOP_RIGHT,
-        }),
-      )
-      .finally(() => {
-        setRefreshNeed(!refreshNeed);
-        setRefreshOffer(!refreshOffer);
-      });
-  };
-
-  const handleAcception = (e) => {
-    let url = `${API.URL[process.env.NODE_ENV]}/offer/${
-      dataOffers[value].id
-    }/accept_reject`;
-    const payload = { isAccepted: true };
-    wrapRequest({
-      method: 'PUT',
-      url,
-      mode: 'cors',
-      cache: 'default',
-      data: payload,
-    })
-      .then(({ data }) => {
-        toast.success(data.message, {
-          position: toast.POSITION.TOP_RIGHT,
-        });
-      })
-      .catch((err) =>
-        toast.error(err, {
-          position: toast.POSITION.TOP_RIGHT,
-        }),
-      )
-      .finally(() => {
-        setRefreshNeed(!refreshNeed);
-        setRefreshOffer(!refreshOffer);
-      });
   };
 
   const flowIfIsOwner = data.length ? (
@@ -199,6 +120,7 @@ const OffersView = ({
                 owner="needOwner"
                 needId={need.id}
                 offerId={dataOffers[value].id}
+                handleClose={handleClose}
               />
             </Box>
           </Modal>
@@ -228,10 +150,6 @@ const OffersView = ({
       </Box>
     </Box>
   );
-
-  useEffect(() => {
-    setValue(0);
-  }, [need?.id]);
 
   return (
     <>

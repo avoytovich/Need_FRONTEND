@@ -1,66 +1,22 @@
-import React, { useState } from 'react';
-import { toast } from 'react-toastify';
+import React from 'react';
 import { Box, TextField, Button } from '@mui/material';
 
-import { text, API } from 'helper/constants';
-import { wrapRequest } from 'utils/api';
+import { text } from 'helper/constants';
 
 import colors from 'helper/colors.sass';
 
 const ChatView = ({
-  owner,
-  needId,
-  offerId,
+  message,
+  handleMessage,
+  handleSendMessage,
   data,
-  refreshChat,
-  setRefreshChat,
+  handleClose,
 }) => {
-  // console.log('data', data);
-  const [message, setMessage] = useState('');
-
   const {
     pages: {
-      chat: { CREATE_MESSAGE, SEND },
+      chat: { CREATE_MESSAGE, SEND, CANCEL },
     },
   } = text;
-
-  const handleMessage = (e) => setMessage(e.target.value);
-
-  const handleSendMessage = () => {
-    let url = `${
-      API.URL[process.env.NODE_ENV]
-    }/chat/create_update?needId=${needId}&offerId=${offerId}`;
-    let payload;
-    if (data.chat) {
-      payload = {
-        messeges: [...data.chat.messeges, `${owner}: ${message}`],
-      };
-    } else {
-      payload = {
-        messeges: [`${owner}: ${message}`],
-      };
-    }
-    wrapRequest({
-      method: 'POST',
-      url,
-      mode: 'cors',
-      cache: 'default',
-      data: payload,
-    })
-      .then(({ data }) => {
-        toast.success(data.message, {
-          position: toast.POSITION.TOP_RIGHT,
-        });
-      })
-      .catch((err) =>
-        toast.error(err, {
-          position: toast.POSITION.TOP_RIGHT,
-        }),
-      )
-      .finally(() => {
-        setRefreshChat(!refreshChat);
-      });
-  };
 
   const isNeedOwner = (item) => item.indexOf('needOwner') !== -1;
 
@@ -74,6 +30,7 @@ const ChatView = ({
       >
         {data.chat?.messeges.map((item) => (
           <Box
+            key={item}
             sx={{
               display: 'flex',
               flexDirection: 'column',
@@ -120,13 +77,29 @@ const ChatView = ({
           />
         </Box>
         <Box m={2}>
-          <Button
-            color="green_light"
-            variant="contained"
-            onClick={handleSendMessage}
-          >
-            {SEND}
-          </Button>
+          <Box m={2}>
+            <Button
+              color="green_light"
+              variant="contained"
+              style={{
+                width: '100%',
+              }}
+              onClick={handleSendMessage}
+            >
+              {SEND}
+            </Button>
+          </Box>
+          <Box m={2}>
+            <Button
+              variant="outlined"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleClose();
+              }}
+            >
+              {CANCEL}
+            </Button>
+          </Box>
         </Box>
       </Box>
     </Box>
